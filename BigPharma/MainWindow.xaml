@@ -1,0 +1,34 @@
+﻿<Window x:Class="BigPharma.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BigPharma"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <Binding RelativeSource="{RelativeSource Self}"/>
+    </Window.DataContext>
+    <Grid Background="#FF333333">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Margin="30">
+            <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Add medication</Label>
+            <Label Foreground="Gainsboro" FontSize="20">Name</Label>
+            <TextBox Padding="3" Name="MedicationName"></TextBox>
+            <Label Foreground="Gainsboro" FontSize="20">Price</Label>
+            <TextBox Padding="3" Name="MedicationPrice"></TextBox>
+            <StackPanel Margin="40" Orientation="Horizontal" HorizontalAlignment="Center" >
+                <Button Name="AddMedication" Width="90" Margin="0, 0, 40, 0" Height="40" Click="Button_Click" FontSize="16">Add</Button>
+                <Button Name="RefreshList" Width="90" Height="40" FontSize="16" Click="Button_Click_1">Refresh</Button>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Margin="30" Grid.Column="1">
+            <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Medication list</Label>
+            <DataGrid Name="MedicationsDataGrid" Height="331">
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>
