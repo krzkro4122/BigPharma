@@ -15,10 +15,6 @@ namespace BigPharmaEngine
             {
                 var output = cnn.Query<MedicationModel>("SELECT * FROM Medications", new DynamicParameters());
                 var outputList = output.ToList();
-                foreach (var item in outputList)
-                {
-                    Debug.WriteLine(item);                  
-                }
                 return Convert(output);
             }
         }
