@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -7,7 +9,7 @@ namespace BigPharmaEngine
 {
     public class SQLiteDataAccess
     {
-        public static List<MedicationModel> LoadMedictaions()
+        public static ObservableCollection<MedicationModel> LoadMedictaions()
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
@@ -17,11 +19,11 @@ namespace BigPharmaEngine
                 {
                     Debug.WriteLine(item);                  
                 }
-                return output.ToList();
+                return Convert(output);
             }
         }
 
-        public static void SaveMedication(MedicationModel medication)
+        public static MedicationModel SaveMedication(MedicationModel medication)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
@@ -30,13 +32,22 @@ namespace BigPharmaEngine
                     "INSERT INTO Medications (Name, Price) values (@Name, @Price)", 
                     medication
                 );
-                Debug.WriteLine("Did it");
+                var output = cnn.Query<MedicationModel>(
+                    "SELECT * FROM Medications WHERE Name=@Name",
+                    medication
+                );
+                return output.First();
             }
         }
 
         private static string LoadConnectionString()
         {
             return """Data Source=".\data.db";Version=3;""";
+        }
+
+        public static ObservableCollection<MedicationModel> Convert(IEnumerable original)
+        {
+            return new ObservableCollection<MedicationModel>(original.Cast<MedicationModel>());
         }
     }
 }

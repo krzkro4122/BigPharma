@@ -15,20 +15,24 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Margin="30">
-            <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Add medication</Label>
-            <Label Foreground="Gainsboro" FontSize="20">Name</Label>
+            <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Manage medications</Label>
+            <DockPanel LastChildFill="False">
+                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="20">Name</Label>
+                <Label Name="NameWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
+            </DockPanel>
             <TextBox Padding="3" Name="MedicationName"></TextBox>
-            <Label Foreground="Gainsboro" FontSize="20">Price</Label>
+            <DockPanel LastChildFill="False">
+                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="20">Price</Label>
+                <Label Name="PriceWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
+            </DockPanel>
             <TextBox Padding="3" Name="MedicationPrice"></TextBox>
-            <StackPanel Margin="40" Orientation="Horizontal" HorizontalAlignment="Center" >
-                <Button Name="AddMedication" Width="90" Margin="0, 0, 40, 0" Height="40" Click="Button_Click" FontSize="16">Add</Button>
-                <Button Name="RefreshList" Width="90" Height="40" FontSize="16" Click="Button_Click_1">Refresh</Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,40,0,0" >
+                <Button Name="AddMedication" Width="90" Height="40" Click="Button_Click" FontSize="16">Add</Button>
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="30" Grid.Column="1">
             <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Medication list</Label>
-            <DataGrid Name="MedicationsDataGrid" Height="331">
-            </DataGrid>
+            <DataGrid Name="MedicationsDataGrid" ItemsSource="{Binding Path=medications}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ColumnWidth="*" Height="331" IsReadOnly="True" ScrollViewer.CanContentScroll="True"/>
         </StackPanel>
     </Grid>
 </Window>
