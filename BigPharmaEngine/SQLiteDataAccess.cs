@@ -27,16 +27,24 @@ namespace BigPharmaEngine
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
+                var output = cnn.QuerySingle<MedicationModel>
+                (
+                    "INSERT INTO Medications (Name, Price) values (@Name, @Price) RETURNING *", 
+                    medication
+                );
+                return output;
+            }
+        }
+
+        public static void DeleteMedication(MedicationModel medication)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
                 cnn.Execute
                 (
-                    "INSERT INTO Medications (Name, Price) values (@Name, @Price)", 
+                    "DELETE FROM Medications WHERE Id=@Id",
                     medication
                 );
-                var output = cnn.Query<MedicationModel>(
-                    "SELECT * FROM Medications WHERE Name=@Name",
-                    medication
-                );
-                return output.First();
             }
         }
 

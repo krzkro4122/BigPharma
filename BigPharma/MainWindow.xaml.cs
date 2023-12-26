@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,12 +10,11 @@ namespace BigPharma
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<MedicationModel> medications { get; set; } = new();
+        public ObservableCollection<MedicationModel> medications { get; set; } = new();    
 
         public MainWindow()
         {
             InitializeComponent();
-
             LoadMedicationList();
         }
 
@@ -28,12 +28,12 @@ namespace BigPharma
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Clear_Warnings();
+            Clear_Warning_Labels();
 
             int price = Parse_Price(MedicationPrice.Text);
             string name = Parse_Name(MedicationName.Text);
-            bool priceAndNameAreInvalid = price == -1 || name == "-1";
 
+            bool priceAndNameAreInvalid = price == -1 || name == "-1";
             if (priceAndNameAreInvalid) return;
             
             medications.Add(
@@ -47,7 +47,7 @@ namespace BigPharma
                 )
             );
 
-            Clear_Inputs();
+            Clear_Form_Inputs();
         }
 
         private int Parse_Price(string priceText)
@@ -61,7 +61,7 @@ namespace BigPharma
             try
             {
                 return Convert_Price(priceText);
-            } catch (Exception ex)
+            } catch (Exception)
             {
                 PriceWarningLabel.Content = "Wrong price!";
                 return -1;
@@ -78,22 +78,33 @@ namespace BigPharma
 
             return nameText;
         }
-
+        
         private int Convert_Price(string priceText)
         {
             return Int32.Parse(priceText);
         }
 
-        private void Clear_Warnings()
+        private void Clear_Warning_Labels()
         {
             PriceWarningLabel.Content = "";
             NameWarningLabel.Content = "";
         }
 
-        private void Clear_Inputs()
+        private void Clear_Form_Inputs()
         {
             MedicationName.Text = "";
             MedicationPrice.Text = "";
+        }
+
+        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
+        {
+            MedicationModel selectedMedication = (MedicationModel) MedicationsDataGrid.SelectedItem;
+            if (selectedMedication != null)
+            {                
+                // Not atomic, whatever
+                SQLiteDataAccess.DeleteMedication(selectedMedication);
+                medications.Remove(selectedMedication);
+            }
         }
     }
 }

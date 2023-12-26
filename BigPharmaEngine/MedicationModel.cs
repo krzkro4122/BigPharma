@@ -1,4 +1,6 @@
-﻿namespace BigPharmaEngine
+﻿using System.ComponentModel;
+
+namespace BigPharmaEngine
 {
     public class MedicationModel
     {
