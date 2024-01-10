@@ -14,7 +14,9 @@ namespace BigPharma
         public ObservableCollection<MedicationModel> ShownMedications { get; set; } = new();
         public string PlaceholderText { get; set; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public MainWindow()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
             LoadMedicationList();
@@ -83,6 +85,23 @@ namespace BigPharma
             {
                 PriceWarningLabel.Content = "Wrong price!";
                 return -1;
+            }
+        }
+
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ShownMedications.Clear();
+
+            string criterion = SearchBox.Text;
+            bool theresNoCritetion = criterion.Length == 0;            
+
+            foreach (var medication in AllMedications) 
+            {
+                bool containsCrtierion = medication.Name.Contains(criterion);
+                if (theresNoCritetion || containsCrtierion)
+                {
+                    ShownMedications.Add(medication);
+                }
             }
         }
 

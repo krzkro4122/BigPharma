@@ -5,17 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="MainWindow" Height="570" Width="1106">
+        Title="MainWindow" Height="570" Width="1076">
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>
     </Window.DataContext>
-    <Grid Background="#FF333333" Margin="0,0,-22,0">
+    <Grid Background="#FF333333">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="399*"></ColumnDefinition>
-            <ColumnDefinition Width="567*"></ColumnDefinition>
-            <ColumnDefinition Width="29*"/>
-            <ColumnDefinition Width="15*"/>
-            <ColumnDefinition Width="95*"/>
+            <ColumnDefinition Width="209*"></ColumnDefinition>
+            <ColumnDefinition Width="329*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Margin="30,30,30,30">
             <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Manage medications</Label>
@@ -37,7 +34,6 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button Name="AddMedication" Width="135" Height="40" Margin="0, 20, 9, 0" Click="AddMedication_Click" FontSize="16">Add</Button>
                         <Button Name="ResetAdditionFields" Width="135" Height="40" Margin="9, 20, 0, 0" Click="ResetForm_Click" FontSize="16" Background="#FF333333" Foreground="#FFDDDDDD" BorderThickness="2,2,2,2">Reset</Button>
-                        
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
@@ -66,11 +62,11 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-        <StackPanel Margin="30,30,30,30" Grid.Column="1" Grid.ColumnSpan="4">
+        <StackPanel Margin="30,30,30,30" Grid.Column="1">
             <DockPanel>
                 <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Medication list</Label>
                 <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Margin="0,1,0,0" RenderTransformOrigin="0.629,-1.213" />
-                <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="15" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9"/>
+                <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="15" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
             </DockPanel>
             <DataGrid Margin="0, 20, 0, 0" Name="MedicationsDataGrid" ItemsSource="{Binding ShownMedications}" HorizontalContentAlignment="Stretch" ColumnWidth="*" Height="406" IsReadOnly="True" ScrollViewer.CanContentScroll="True" Background="#FFDCDCD9"/>
         </StackPanel>
