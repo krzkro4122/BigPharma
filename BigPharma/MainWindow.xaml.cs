@@ -10,7 +10,9 @@ namespace BigPharma
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<MedicationModel> medications { get; set; } = new();    
+        public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
+        public ObservableCollection<MedicationModel> ShownMedications { get; set; } = new();
+        public string PlaceholderText { get; set; }
 
         public MainWindow()
         {
@@ -22,11 +24,11 @@ namespace BigPharma
         {
             foreach (var medication in SQLiteDataAccess.LoadMedictaions())
             {
-                medications.Add(medication);
+                AddMedicationInternal(medication);
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddMedication_Click(object sender, RoutedEventArgs e)
         {
             Clear_Warning_Labels();
 
@@ -35,18 +37,34 @@ namespace BigPharma
 
             bool priceAndNameAreInvalid = price == -1 || name == "-1";
             if (priceAndNameAreInvalid) return;
-            
-            medications.Add(
-                SQLiteDataAccess.SaveMedication
-                (
-                    new MedicationModel()
-                    {
-                        Name = name,
-                        Price = price
-                    }
-                )
+
+            MedicationModel addedMedication = SQLiteDataAccess.SaveMedication
+            (
+                new MedicationModel()
+                {
+                    Name = name,
+                    Price = price
+                }
             );
 
+            AddMedicationInternal(addedMedication);
+
+            Clear_Form_Inputs();
+        }
+
+        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
+        {
+            MedicationModel selectedMedication = (MedicationModel)MedicationsDataGrid.SelectedItem;
+            if (selectedMedication != null)
+            {
+                // Not atomic, whatever
+                SQLiteDataAccess.DeleteMedication(selectedMedication);
+                AllMedications.Remove(selectedMedication);
+            }
+        }
+
+        private void ResetForm_Click(object sender, RoutedEventArgs e)
+        {
             Clear_Form_Inputs();
         }
 
@@ -96,14 +114,13 @@ namespace BigPharma
             MedicationPrice.Text = "";
         }
 
-        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
+        private void AddMedicationInternal(MedicationModel medication)
         {
-            MedicationModel selectedMedication = (MedicationModel) MedicationsDataGrid.SelectedItem;
-            if (selectedMedication != null)
-            {                
-                // Not atomic, whatever
-                SQLiteDataAccess.DeleteMedication(selectedMedication);
-                medications.Remove(selectedMedication);
+            bool theresNoSearchBoxCriterion = SearchBox.Text.Length == 0;
+            if (theresNoSearchBoxCriterion)
+            {
+                AllMedications.Add(medication);
+                ShownMedications.Add(medication);
             }
         }
     }
