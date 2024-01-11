@@ -25,7 +25,7 @@ namespace BigPharmaEngine
             {
                 var output = cnn.QuerySingle<MedicationModel>
                 (
-                    "INSERT INTO Medications (Name, Price) values (@Name, @Price) RETURNING *", 
+                    "INSERT INTO Medications (Name, Price, Quantity, Description) values (@Name, @Price, @Quantity, @Description) RETURNING *", 
                     medication
                 );
                 return output;
