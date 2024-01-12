@@ -59,7 +59,7 @@
                         <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Description</Label>
                         <Label Name="DescriptionWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
                     </DockPanel>
-                    <TextBox Height="40" Padding="3" Name="MedicationDescription" Background="#FFDCDCD9"></TextBox>
+                    <TextBox Height="40" Padding="3" Name="MedicationDescription" Background="#FFDCDCD9" TextWrapping="Wrap"></TextBox>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -84,8 +84,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="2*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -93,17 +92,17 @@
                             <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:"/>
                             <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Name, ElementName=MedicationsDataGrid}"/>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <StackPanel Grid.Row="1" Grid.RowSpan="2"  Orientation="Horizontal" Height="39" VerticalAlignment="Top">
                             <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description:"/>
-                            <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}"/>
+                            <TextBlock TextWrapping="Wrap" Foreground="Gainsboro" FontSize="16" Text="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}" Width="247" Height="38"/>
                         </StackPanel>
-                        <Grid Grid.Row="3">
+                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="10"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="10"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id:"/>
