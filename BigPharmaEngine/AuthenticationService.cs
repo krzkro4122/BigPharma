@@ -20,7 +20,7 @@ namespace BigPharmaEngine
         {
             if (password == confirmPassword)
             {
-                User user = new User(username, email, password);
+                User user = new User() { Email = email, Username = username, Password = password };
                 SQLiteDataAccess.SaveUser(user);
                 return true;
             }

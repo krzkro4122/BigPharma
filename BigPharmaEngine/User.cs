@@ -8,12 +8,7 @@ namespace BigPharmaEngine
 {
     public class User
     {
-        public User(string username, string email, string password)
-        {
-            Username = username;
-            Email = email;
-            Password = password;
-        }
+
         public int Id { get; set; }
         public string Username
         {
