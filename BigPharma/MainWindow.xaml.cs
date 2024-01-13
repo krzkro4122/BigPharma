@@ -1,194 +1,79 @@
-﻿using BigPharmaEngine;
+﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace BigPharma
 {
     public partial class MainWindow : Window
     {
-        public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
-        public ObservableCollection<MedicationModel> ShownMedications { get; set; } = new();
-        public string PlaceholderText { get; set; }
+        StockManager stock;
+        SaleManager sale;
+        Summaries summaries;
+        AuthWindow authWindow;
 
-        Explorer explorer = new();
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public MainWindow()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
-            LoadMedicationList();
+            authWindow = new();
+            stock = new();
+            sale = new();
+            summaries = new();
         }
 
-
-        private void LoadMedicationList()
+        private void OnClosing(object sender, CancelEventArgs e)
         {
-            foreach (var medication in SQLiteDataAccess.LoadMedictaions())
-            {
-                AddMedicationInternal(medication);
-            }
+            foreach(Window window in Application.Current.Windows) window.Close();
         }
 
-        private void AddMedication_Click(object sender, RoutedEventArgs e)
+        public void Unlock_Resources()
         {
-            Clear_Warning_Labels();
+            MenuAuthButton.Opacity = 0.5;
+            MenuAuthButton.IsHitTestVisible = false;
 
-            int price = Parse_Price(MedicationPrice.Text);
-            int quantity = Parse_Quantity(MedicationQuantity.Text);
-            string name = Parse_Name(MedicationName.Text);
-            string description = Parse_Name(MedicationDescription.Text);
+            MenuStockButton.IsHitTestVisible = true;
+            MenuStockButton.Opacity = 1;
 
-            bool priceAndNameAreInvalid = price == -1 || name == "-1";
-            if (priceAndNameAreInvalid) return;
+            MenuSaleButton.IsHitTestVisible = true;
+            MenuSaleButton.Opacity = 1;
 
-            MedicationModel addedMedication = SQLiteDataAccess.SaveMedication
-            (
-                new MedicationModel()
-                {
-                    Name = name,
-                    Price = price,
-                    Description = description,
-                    Quantity = quantity,
-                }
-            );
-
-            AddMedicationInternal(addedMedication);
-
-            Clear_Form_Inputs();
+            MenuSummariesButton.IsHitTestVisible = true;
+            MenuSummariesButton.Opacity = 1;
         }
 
-        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
+        private void Open_Stock_Click(object sender, RoutedEventArgs e)
         {
-            MedicationModel selectedMedication = (MedicationModel)MedicationsDataGrid.SelectedItem;
-            if (selectedMedication != null)
-            {
-                // Not atomic, whatever
-                SQLiteDataAccess.DeleteMedication(selectedMedication);
-                DeleteMedicationInternal(selectedMedication);
-            }
+            Open_Child_Window(stock);
         }
 
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Open_Auth_Click(object sender, RoutedEventArgs e)
         {
-            ShownMedications.Clear();
-
-            string criterion = SearchBox.Text;
-            bool theresNoCriterion = criterion.Length == 0;
-
-            foreach (var medication in AllMedications)
-            {
-                bool containsCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
-                if (theresNoCriterion || containsCrtierion)
-                {
-                    ShownMedications.Add(medication);
-                }
-            }
+            Open_Child_Window(authWindow);
         }
 
-        private int Parse_Price(string priceText)
+        private void Open_Sale_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(priceText))
-            {
-                PriceWarningLabel.Content = "Empty price!";
-                return -1;
-            }
-
-            try
-            {
-                return Convert_Numeral(priceText);
-            } catch (Exception)
-            {
-                PriceWarningLabel.Content = "Wrong price!";
-                return -1;
-            }
+            Open_Child_Window(sale);
+        }
+        private void Open_Summaries_Click(object sender, RoutedEventArgs e)
+        {
+            Open_Child_Window(summaries);
         }
 
-        private int Parse_Quantity(string priceText)
+        private void Open_Child_Window(Window childToOpen)
         {
-            if (string.IsNullOrEmpty(priceText))
-            {
-                QuantityWarningLabel.Content = "Empty price!";
-                return -1;
-            }
-
-            try
-            {
-                return Convert_Numeral(priceText);
-            }
-            catch (Exception)
-            {
-                QuantityWarningLabel.Content = "Wrong price!";
-                return -1;
-            }
-        }
-
-        private string Parse_Name(string nameText)
-        {
-            if (string.IsNullOrEmpty(nameText))
-            {
-                NameWarningLabel.Content = "Empty name!";
-                return "-1";
-            }
-
-            return nameText;
-        }
-
-        private int Convert_Numeral(string priceText)
-        {
-            return Int32.Parse(priceText);
-        }
-
-        private void Clear_Warning_Labels()
-        {
-            PriceWarningLabel.Content = "";
-            NameWarningLabel.Content = "";
-            QuantityWarningLabel.Content = "";
-            DescriptionWarningLabel.Content = "";
-        }
-
-        private void Clear_Form_Inputs()
-        {
-            MedicationName.Text = "";
-            MedicationPrice.Text = "";
-            MedicationQuantity.Text = "";
-            MedicationDescription.Text = "";
-        }
-
-        private void AddMedicationInternal(MedicationModel medication)
-        {
-            string criterion = SearchBox.Text;
-            bool theresNoSearchBoxCriterion = criterion.Length == 0;
-            bool satisfiesCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
-
-            if (theresNoSearchBoxCriterion || satisfiesCrtierion)
-            {
-                AllMedications.Add(medication);
-                ShownMedications.Add(medication);
-            } else if (!satisfiesCrtierion)
-            {
-                AllMedications.Add(medication);
-            }            
-        }
-
-        private void DeleteMedicationInternal(MedicationModel medication)
-        {
-            AllMedications.Remove(medication);
-            ShownMedications.Remove(medication);
-        }
-
-
-
-        private void ResetForm_Click(object sender, RoutedEventArgs e)
-        {
-            //Clear_Form_Inputs();            
-            if (explorer == null) explorer = new Explorer();
-
-            explorer.ShowDialog();
+            childToOpen.ShowDialog();
         }
     }
 }

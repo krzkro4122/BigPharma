@@ -25,4 +25,13 @@
     <ProjectReference Include="..\BigPharmaEngine\BigPharmaEngine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Summaries.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SaleManager.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

@@ -3,132 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BigPharma"
+        xmlns:local="clr-namespace:BigPharma"        
         mc:Ignorable="d"
-        Title="MainWindow" Height="806" Width="1076">
-    <Window.DataContext>
-        <Binding RelativeSource="{RelativeSource Self}"/>
-    </Window.DataContext>
-    <Grid Background="#FF333333">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="471*"></ColumnDefinition>
-            <ColumnDefinition Width="605*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid Margin="30,30,30,30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="11*"></RowDefinition>
-                <RowDefinition Height="0"></RowDefinition>
-                <RowDefinition Height="7*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Manage medications</Label>
-            <GroupBox Grid.Row="1" Padding="20, 10, 20, 20" Height="333">
-                <GroupBox.Header>
-                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Add</Label>
-                </GroupBox.Header>
-                <StackPanel>
-                    <DockPanel LastChildFill="False">
-                        <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Name</Label>
-                        <Label Name="NameWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
-                    </DockPanel>
-                    <TextBox Padding="3" Name="MedicationName" Background="Gainsboro"></TextBox>
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="10"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <DockPanel LastChildFill="False">
-                                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Price</Label>
-                                <Label Name="PriceWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
-                            </DockPanel>
-                            <TextBox Padding="3" Name="MedicationPrice" Background="#FFDCDCD9"></TextBox>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2">
-                            <DockPanel LastChildFill="False">
-                                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Quantity</Label>
-                                <Label Name="QuantityWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
-                            </DockPanel>
-                            <TextBox Padding="3" Name="MedicationQuantity" Background="#FFDCDCD9"></TextBox>
-                        </StackPanel>
-                    </Grid>
-
-                    <DockPanel LastChildFill="False">
-                        <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Description</Label>
-                        <Label Name="DescriptionWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
-                    </DockPanel>
-                    <TextBox Height="40" Padding="3" Name="MedicationDescription" Background="#FFDCDCD9" TextWrapping="Wrap"></TextBox>
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="10"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Name="AddMedication" Width="135" Height="40" Margin="0, 20, 0, 0" Click="AddMedication_Click" FontSize="16">Add</Button>
-                        <Button Grid.Column="2" Name="ResetAdditionFields" Width="135" Height="40" Margin="0, 20, 0, 0" Click="ResetForm_Click" FontSize="16" Background="#FF333333" Foreground="#FFDDDDDD" BorderThickness="2,2,2,2">Reset</Button>
-                    </Grid>
-                </StackPanel>
-            </GroupBox>
-            <GroupBox Grid.Row="3" Padding="20, 10, 20, 20">
-                <GroupBox.Header>
-                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold" Content="Delete"/>
-                </GroupBox.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="2*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:"/>
-                            <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Name, ElementName=MedicationsDataGrid}"/>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.RowSpan="2"  Orientation="Horizontal" Height="39" VerticalAlignment="Top">
-                            <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description:"/>
-                            <TextBlock TextWrapping="Wrap" Foreground="Gainsboro" FontSize="16" Text="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}" Width="247" Height="38"/>
-                        </StackPanel>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="10"></ColumnDefinition>
-                                <ColumnDefinition Width="2*"></ColumnDefinition>
-                                <ColumnDefinition Width="10"></ColumnDefinition>
-                                <ColumnDefinition Width="2*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Id, ElementName=MedicationsDataGrid}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Price, ElementName=MedicationsDataGrid}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="4" Orientation="Horizontal">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Quantity, ElementName=MedicationsDataGrid}"/>
-                            </StackPanel>
-                        </Grid>
-                        <Button Grid.Row="5" x:Name="DeleteMedication"  Width="135" Height="40" FontSize="16" Click="DeleteMedication_Click" Content="Delete" VerticalAlignment="Top"/>
-                    </Grid>
-                </Grid>
-            </GroupBox>
-        </Grid>
-        <StackPanel Margin="30,30,30,30" Grid.Column="1">
-            <DockPanel>
-                <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Medication list</Label>
-                <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Margin="0,1,0,0" RenderTransformOrigin="0.629,-1.213" />
-                <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="18" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
-            </DockPanel>
-            <DataGrid Margin="0, 20, 0, 0" Name="MedicationsDataGrid" ItemsSource="{Binding ShownMedications}" HorizontalContentAlignment="Stretch" ColumnWidth="*" Height="668" IsReadOnly="True" ScrollViewer.CanContentScroll="True" Background="#FFDCDCD9"/>
-        </StackPanel>
+        Title="BigPharma" Height="450" Width="400" Foreground="Black" Background="#FF333333"        
+>
+    <Grid Margin="80, 40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" Foreground="#FFEBE8E8" FontFamily="Courier New" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" LineHeight="7" Width="196">Big Pharma</TextBlock>
+        <Button Name="MenuAuthButton" Grid.Row="1" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Auth_Click" >Authenticate</Button>
+        <Button IsHitTestVisible="False" Name="MenuStockButton" Grid.Row="2" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Stock_Click" Opacity="0.5" >Stock Manager</Button>
+        <Button IsHitTestVisible="False" Name="MenuSaleButton" Grid.Row="3" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Sale_Click" Opacity="0.5">Sale Manager</Button>
+        <Button IsHitTestVisible="False" Name="MenuSummariesButton" Grid.Row="4" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Summaries_Click" Opacity="0.5">Summaries</Button>
     </Grid>
 </Window>
