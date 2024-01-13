@@ -186,6 +186,5 @@ namespace BigPharma
             AllMedications.Remove(medication);
             ShownMedications.Remove(medication);
         }
-
     }
 }

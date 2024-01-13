@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="BigPharma - Stock Manager" Height="806" Width="1076"
+        Title="BigPharma - Stock Manager" Height="820" Width="1076"
         Closing="OnClosing"
         >
     <Window.DataContext>
@@ -69,8 +69,8 @@
                             <ColumnDefinition Width="10"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Name="AddMedication" Width="135" Height="40" Margin="0, 20, 0, 0" Click="AddMedication_Click" FontSize="16">Add</Button>
-                        <Button Grid.Column="2" Name="ResetAdditionFields" Width="135" Height="40" Margin="0, 20, 0, 0" Click="ResetForm_Click" FontSize="16" Background="#FF333333" Foreground="#FFDDDDDD" BorderThickness="2,2,2,2">Reset</Button>
+                        <Button Grid.Column="0" Name="AddMedication" Width="135" Height="40" Margin="0, 20, 0, 0" Click="AddMedication_Click" FontSize="16">_Add</Button>
+                        <Button Grid.Column="2" Name="ResetAdditionFields" Width="135" Height="40" Margin="0, 20, 0, 0" Click="ResetForm_Click" FontSize="16" Background="#FF333333" Foreground="#FFDDDDDD" BorderThickness="2,2,2,2">_Reset</Button>
                     </Grid>
                 </StackPanel>
             </GroupBox>
@@ -130,7 +130,15 @@
                 <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Margin="0,1,0,0" RenderTransformOrigin="0.629,-1.213" />
                 <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="18" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
             </DockPanel>
-            <DataGrid Margin="0, 20, 0, 0" Name="MedicationsDataGrid" ItemsSource="{Binding ShownMedications}" HorizontalContentAlignment="Stretch" ColumnWidth="*" Height="668" IsReadOnly="True" ScrollViewer.CanContentScroll="True" Background="#FFDCDCD9"/>
+            <DataGrid Margin="0, 20, 0, 0" Name="MedicationsDataGrid" ItemsSource="{Binding ShownMedications}" AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" AlternatingRowBackground="WhiteSmoke" Height="668" IsReadOnly="True" ScrollViewer.CanContentScroll="True" Background="#FFDCDCD9">
+                <DataGrid.Columns >
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="3*"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="2*"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="8*"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
     </Grid>
 </Window>

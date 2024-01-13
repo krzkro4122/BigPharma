@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="AuthWindow" Height="450" Width="800" Background="#FF333333" Closing="OnClosing">
     <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="80" Foreground="LimeGreen" FontFamily="Nirmala UI">Siemano!!!</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="80" Foreground="LimeGreen" FontFamily="Nirmala UI">#TODO</TextBlock>
     </Grid>
 </Window>
