@@ -2,8 +2,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace BigPharma
 {
@@ -48,10 +50,9 @@ namespace BigPharma
             string description = Parse_Name(MedicationDescription.Text);
 
             bool priceAndNameAreInvalid = price == -1 || name == "-1";
-            if (priceAndNameAreInvalid) return;
+            if (priceAndNameAreInvalid) return;            
 
-            MedicationModel addedMedication = SQLiteDataAccess.SaveMedication
-            (
+            AddMedicationInternal(
                 new MedicationModel()
                 {
                     Name = name,
@@ -61,20 +62,12 @@ namespace BigPharma
                 }
             );
 
-            AddMedicationInternal(addedMedication);
-
             Clear_Form_Inputs();
         }
 
         private void DeleteMedication_Click(object sender, RoutedEventArgs e)
         {
-            MedicationModel selectedMedication = (MedicationModel)MedicationsDataGrid.SelectedItem;
-            if (selectedMedication != null)
-            {
-                // Not atomic, whatever
-                SQLiteDataAccess.DeleteMedication(selectedMedication);
-                DeleteMedicationInternal(selectedMedication);
-            }
+            DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);                        
         }
 
         private void ResetForm_Click(object sender, RoutedEventArgs e)
@@ -170,6 +163,17 @@ namespace BigPharma
 
         private void AddMedicationInternal(MedicationModel medication)
         {
+            MedicationModel addedMedication = SQLiteDataAccess.SaveMedication
+            (
+                new MedicationModel()
+                {
+                    Name = medication.Name,
+                    Price = medication.Price,
+                    Description = medication.Description,
+                    Quantity = medication.Quantity,
+                }
+            );
+
             string criterion = SearchBox.Text;
             bool theresNoSearchBoxCriterion = criterion.Length == 0;
             bool satisfiesCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
@@ -186,8 +190,13 @@ namespace BigPharma
 
         private void DeleteMedicationInternal(MedicationModel medication)
         {
-            AllMedications.Remove(medication);
-            ShownMedications.Remove(medication);
+            if (medication != null)
+            {
+                // Not atomic, whatever
+                SQLiteDataAccess.DeleteMedication(medication);
+                AllMedications.Remove(medication);
+                ShownMedications.Remove(medication);
+            }
         }
     }
 }
