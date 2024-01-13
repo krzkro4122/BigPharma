@@ -3,6 +3,7 @@ using System.Windows;
 
 namespace BigPharma
 {
+
     public partial class SaleManager : Window
     {
         public SaleManager()

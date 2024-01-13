@@ -43,15 +43,53 @@ namespace BigPharmaEngine
                 );
             }
         }
-
+        public static ObservableCollection<User> LoadUsers()
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<User>("SELECT * FROM Users", new DynamicParameters());
+                var outputList = output.ToList();
+                return ConvertUser(output);
+            }
+        }
+        public static User SaveUser(User user)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.QuerySingle<User>
+                (
+                                       "INSERT INTO Users (Username, Email, Password) values (@Username, @Email, @Password) RETURNING *",
+                                                          user
+                                                                         );
+                return output;
+            }
+        }
+        public static void DeleteUser(User user)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute
+                (
+                                       "DELETE FROM Users WHERE Id=@Id",
+                                                          user
+                                                                         );
+            }
+        }
         private static string LoadConnectionString()
         {
             return """Data Source=".\data.db";Version=3;""";
         }
 
+
         public static ObservableCollection<MedicationModel> Convert(IEnumerable original)
         {
             return new ObservableCollection<MedicationModel>(original.Cast<MedicationModel>());
         }
+        public static ObservableCollection<User> ConvertUser(IEnumerable original)
+        {
+            return new ObservableCollection<User>(original.Cast<User>());
+        }
+
+
     }
 }
