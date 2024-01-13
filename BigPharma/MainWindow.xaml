@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BigPharma"        
         mc:Ignorable="d"
-        Title="BigPharma" Height="450" Width="400" Foreground="Black" Background="#FF333333"        
+        Title="BigPharma" Height="450" Width="400" Foreground="Black" Background="#FF333333"          
+        Closing="OnClosing"
 >
     <Grid Margin="80, 40">
         <Grid.RowDefinitions>
