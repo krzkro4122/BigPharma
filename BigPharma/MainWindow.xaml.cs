@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 
 namespace BigPharma
@@ -24,6 +25,8 @@ namespace BigPharma
             authWindow.Close();
             stock.Close();
             sale.Close();
+            summaries.Close();
+            Console.WriteLine("Quitting...");
         }
 
         public void Unlock_Resources()

@@ -12,8 +12,11 @@ namespace BigPharma
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            this.Hide();
-            e.Cancel = true;
+            if (sender.GetType() != typeof(MainWindow))
+            {
+                this.Hide();
+                e.Cancel = true;
+            }
         }
     }
 }
