@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,12 @@ namespace BigPharma
         public Explorer()
         {
             InitializeComponent();
+        }
+
+        private void OnClosing(object sender, CancelEventArgs e)
+        {
+            this.Hide();
+            e.Cancel = true;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,8 @@ namespace BigPharma
         public ObservableCollection<MedicationModel> ShownMedications { get; set; } = new();
         public string PlaceholderText { get; set; }
 
+        Explorer explorer = new();
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public MainWindow()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -21,6 +24,7 @@ namespace BigPharma
             InitializeComponent();
             LoadMedicationList();
         }
+
 
         private void LoadMedicationList()
         {
@@ -67,11 +71,6 @@ namespace BigPharma
                 SQLiteDataAccess.DeleteMedication(selectedMedication);
                 DeleteMedicationInternal(selectedMedication);
             }
-        }
-
-        private void ResetForm_Click(object sender, RoutedEventArgs e)
-        {
-            Clear_Form_Inputs();
         }
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -180,6 +179,16 @@ namespace BigPharma
         {
             AllMedications.Remove(medication);
             ShownMedications.Remove(medication);
+        }
+
+
+
+        private void ResetForm_Click(object sender, RoutedEventArgs e)
+        {
+            //Clear_Form_Inputs();            
+            if (explorer == null) explorer = new Explorer();
+
+            explorer.ShowDialog();
         }
     }
 }
