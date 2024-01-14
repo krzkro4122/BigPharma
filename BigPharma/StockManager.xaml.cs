@@ -1,4 +1,4 @@
-﻿using BigPharmaEngine;
+﻿    using BigPharmaEngine;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,11 +13,8 @@ namespace BigPharma
     {
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
         public ObservableCollection<MedicationModel> ShownMedications { get; set; } = new();
-        public string PlaceholderText { get; set; }
 
-        #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public StockManager()
-        #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             InitializeComponent();
             LoadMedicationList();
@@ -27,7 +24,8 @@ namespace BigPharma
         {
             foreach (var medication in SQLiteDataAccess.LoadMedictaions())
             {
-                AddMedicationInternal(medication);
+                AllMedications.Add(medication);
+                ShownMedications.Add(medication);
             }
         }
 

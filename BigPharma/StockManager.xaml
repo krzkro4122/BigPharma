@@ -94,7 +94,7 @@
                             <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:"/>
                             <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Name, ElementName=MedicationsDataGrid}"/>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.RowSpan="2"  Orientation="Horizontal" Height="39" VerticalAlignment="Top">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="39" VerticalAlignment="Top">
                             <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description:"/>
                             <TextBlock TextWrapping="Wrap" Foreground="Gainsboro" FontSize="16" Text="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}" Width="247" Height="38"/>
                         </StackPanel>
@@ -119,7 +119,7 @@
                                 <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Quantity, ElementName=MedicationsDataGrid}"/>
                             </StackPanel>
                         </Grid>
-                        <Button Grid.Row="5" x:Name="DeleteMedication"  Width="135" Height="40" FontSize="16" Click="DeleteMedication_Click" Content="Delete" VerticalAlignment="Top"/>
+                        <Button Grid.Row="5" x:Name="DeleteMedication"  Width="135" Height="40" FontSize="16" Click="DeleteMedication_Click" Content="_Delete" VerticalAlignment="Top"/>
                     </Grid>
                 </Grid>
             </GroupBox>
