@@ -82,8 +82,9 @@ namespace BigPharma
 
             foreach (var medication in AllMedications)
             {
-                bool containsCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
-                if (theresNoCriterion || containsCrtierion)
+                bool nameContainsCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
+                bool descriptionContainsCrtierion = medication.Description.ToLower().Contains(criterion.ToLower());
+                if (theresNoCriterion || nameContainsCrtierion || descriptionContainsCrtierion)
                 {
                     ShownMedications.Add(medication);
                 }
@@ -178,11 +179,11 @@ namespace BigPharma
 
             if (theresNoSearchBoxCriterion || satisfiesCrtierion)
             {
-                AllMedications.Add(medication);
-                ShownMedications.Add(medication);
+                AllMedications.Add(addedMedication);
+                ShownMedications.Add(addedMedication);
             } else if (!satisfiesCrtierion)
             {
-                AllMedications.Add(medication);
+                AllMedications.Add(addedMedication);
             }            
         }
 
