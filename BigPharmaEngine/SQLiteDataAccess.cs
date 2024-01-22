@@ -80,7 +80,15 @@ namespace BigPharmaEngine
             return """Data Source=".\data.db";Version=3;""";
         }
 
-
+        public static MedicationModel GetMedicationWithHighestStock()
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                // Query to get the medication with the highest stock
+                var output = cnn.QuerySingle<MedicationModel>("SELECT * FROM Medications ORDER BY Quantity DESC LIMIT 1", new DynamicParameters());
+                return output;
+            }
+        }
         public static ObservableCollection<MedicationModel> Convert(IEnumerable original)
         {
             return new ObservableCollection<MedicationModel>(original.Cast<MedicationModel>());
