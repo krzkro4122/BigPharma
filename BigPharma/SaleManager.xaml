@@ -6,22 +6,91 @@
         xmlns:components="clr-namespace:BigPharma.Components"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="AuthWindow" Height="450" Width="800" Background="#FF333333" Closing="OnClosing">
+        Title="SaleWindow" Height="450" Width="1000" Background="#FF333333" Closing="OnClosing">
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="471*"></ColumnDefinition>
+            <ColumnDefinition Width="200*"></ColumnDefinition>
             <ColumnDefinition Width="605*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <components:OrderBrowserComponent x:Name="OrdersView"
-            Grid.Column="1"
+            Grid.Column="2"
             Orders="{Binding AllOrders}"
             OrderClicked="{Binding OrderClickedHandler}"
             />
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0"
+                      Margin="0, 20, 0, 0"
+                      Padding="20, 0, 20, 20" Height="200">
+                    <GroupBox.Header>
+                        <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Create order</Label>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <DockPanel LastChildFill="False">
+                            <Label DockPanel.Dock="Top"
+                                   Foreground="Gainsboro" 
+                                   HorizontalContentAlignment="Center"
+                                   FontSize="18">Quantity</Label>
+                            <Label Name="DescriptionWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
+                        </DockPanel>
+                        <TextBox Height="40" 
+                                 Margin="10, 0, 10, 10"
+                                 Padding="3" Name="MedicationDescription" 
+                                 Background="#FFDCDCD9" 
+                                 TextWrapping="Wrap"></TextBox>
+                        <Button Name="CreateOrder"
+                                Click="CreateOrder_OnClick"
+                                Height="40"
+                                Margin="0, 0, 0, 0" 
+                                FontSize="16">_Add</Button>
+                    </StackPanel>
+            </GroupBox>
+            <GroupBox Grid.Row="1"
+                      VerticalAlignment="Bottom"
+                      Margin="0, 0, 0, 30"
+                      Padding="20, 0, 20, 20" Height="133">
+                <GroupBox.Header>
+                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Finish order</Label>
+                </GroupBox.Header>
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="Complete"
+                            Click="Complete_OnClick"
+                            Background="Chartreuse"
+                            BorderThickness="3"
+                            BorderBrush="White"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Height="50"
+                            Width="50"
+                            Margin="0, 0, 0, 0"
+                            FontSize="28">✔️</Button>
+                    <Button Grid.Column="1" Name="Cancel"
+                            Click="Cancel_OnClick"
+                            Background="Brown"
+                            BorderThickness="3"
+                            BorderBrush="White"
+                            HorizontalAlignment="Center" 
+                            Height="50" 
+                            Width="50"
+                            Margin="0, 0, 0, 0"
+                            FontSize="28">❌</Button>
+                </Grid>
+            </GroupBox>
+        </Grid>
         <components:MedicationBrowserComponent x:Name="MedicationsView"
-                                    Grid.Column="1"
+                                    Grid.Column="0"
                                     Medications="{Binding AllMedications}"
                                     MedicationClicked="{Binding MedicationClickedHandler}"/>
     </Grid>

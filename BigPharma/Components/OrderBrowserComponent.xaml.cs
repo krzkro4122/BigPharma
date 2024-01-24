@@ -9,27 +9,27 @@ namespace BigPharma.Components;
 
 public partial class OrderBrowserComponent : UserControl
 {
-    private static readonly DependencyProperty medicationsDependencyProperty =
+    private static readonly DependencyProperty ordersDependencyProperty =
         DependencyProperty.Register(nameof(Orders),
-            typeof(ObservableCollection<MedicationModel>),
-            typeof(MedicationBrowserComponent));
+            typeof(ObservableCollection<OrderModel>),
+            typeof(OrderBrowserComponent));
 
-    private static readonly DependencyProperty medicationClickedDependencyProperty =
+    private static readonly DependencyProperty orderClickedDependencyProperty =
         DependencyProperty.Register(
             nameof(OrderClicked),
-            typeof(Action<MedicationModel>),   
-            typeof(MedicationBrowserComponent));
+            typeof(Action<OrderModel>),   
+            typeof(OrderBrowserComponent));
 
     public ObservableCollection<OrderModel> Orders
     {
-        get => (ObservableCollection<OrderModel>)GetValue(medicationsDependencyProperty);
-        set => SetValue(medicationsDependencyProperty, value);
+        get => (ObservableCollection<OrderModel>)GetValue(ordersDependencyProperty);
+        set => SetValue(ordersDependencyProperty, value);
     }
     
     public Action<OrderModel> OrderClicked
     {
-        get => (Action<OrderModel>)GetValue(medicationClickedDependencyProperty);
-        set => SetValue(medicationClickedDependencyProperty, value);
+        get => (Action<OrderModel>)GetValue(orderClickedDependencyProperty);
+        set => SetValue(orderClickedDependencyProperty, value);
     }
     
     public OrderBrowserComponent()

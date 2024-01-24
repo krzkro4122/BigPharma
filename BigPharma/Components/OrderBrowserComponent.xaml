@@ -9,7 +9,7 @@
     
     <StackPanel Margin="30,30,30,30">
         <DockPanel>
-            <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Medication list</Label>
+            <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Orders</Label>
             <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Padding="0,5,0,0" RenderTransformOrigin="0.629,-1.213" />
             <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="18" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
         </DockPanel>
@@ -23,10 +23,10 @@
                   Background="#FFDCDCD9">
             <DataGrid.Columns >
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
-                <DataGridTextColumn Header="MedicationId" Binding="{Binding MedicationId}" Width="3*"/>
+                <DataGridTextColumn Header="MedicationId" Binding="{Binding MedicationId}" Width="13*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="7*"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="2*"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="8*"/>
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>

@@ -18,7 +18,7 @@ namespace BigPharmaEngine
                 return Convert(output);
             }
         }
-
+        
         public static MedicationModel SaveMedication(MedicationModel medication)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
@@ -40,6 +40,38 @@ namespace BigPharmaEngine
                 (
                     "DELETE FROM Medications WHERE Id=@Id",
                     medication
+                );
+            }
+        }
+
+        public static IEnumerable<OrderModel> LoadOrders()
+        {
+            using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
+            var output = cnn.Query<OrderModel>("SELECT * FROM Orders", new DynamicParameters());
+            return output;
+        }
+        
+        public static OrderModel SaveOrder(OrderModel order)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.QuerySingle<OrderModel>
+                (
+                    "INSERT INTO Orders (Price, Status, MedicationId, Quantity, CreationDate, CompletionDate) values (@Price, @Status, @MedicationId, @Quantity, @CreationDate, @CompletionDate) RETURNING *", 
+                    order
+                );
+                return output;
+            }
+        }
+
+        public static void DeleteOrder(OrderModel order)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute
+                (
+                    "DELETE FROM Orders WHERE Id=@Id",
+                    order
                 );
             }
         }

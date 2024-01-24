@@ -7,4 +7,6 @@ public class OrderModel
     public OrderStatus Status { get; set; }
     public int MedicationId { get; set; }
     public int Quantity { get; set; }
+    public DateTime CreationDate { get; set; }
+    public DateTime CompletionDate { get; set; }
 }

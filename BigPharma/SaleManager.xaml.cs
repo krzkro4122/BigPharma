@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using BigPharmaEngine;
 
@@ -13,13 +11,17 @@ namespace BigPharma
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
         public MedicationModel SelectedMedication { get; set; }
         public ObservableCollection<OrderModel> AllOrders { get; set; } = new();
-        public OrderModel SelectedModel { get; set; }
+        public OrderModel SelectedOrder { get; set; }
+
+        public int QuantityToOrder { get; set; } = 0;
         
         public SaleManager()
         {
             InitializeComponent();
             LoadMedicationList();
             LoadOrderList();
+            MedicationClickedHandler = medication => SelectedMedication = medication;
+            OrderClickedHandler = order => SelectedOrder = order;
         }
 
         private void LoadMedicationList()
@@ -32,15 +34,16 @@ namespace BigPharma
 
         private void LoadOrderList()
         {
-            //TODO: Populate orders
+            var orders = SQLiteDataAccess.LoadOrders();
+            foreach (var order in orders)
+            {
+                AllOrders.Add(order);
+            }
         }
 
-        public Action<MedicationModel> MedicationClickedHandler => medication =>
-        {
-            return;
-        };
+        public Action<MedicationModel> MedicationClickedHandler { get; private set; }
 
-        public Action<OrderModel> OrderClickedHandler { get; }
+        public Action<OrderModel> OrderClickedHandler { get; private set; }
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
@@ -49,6 +52,21 @@ namespace BigPharma
                 this.Hide();
                 e.Cancel = true;
             }
+        }
+
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Complete_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CreateOrder_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
