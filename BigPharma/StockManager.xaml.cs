@@ -107,22 +107,20 @@ namespace BigPharma
         private void Handle_Medication_Update()
         {
             int Id;
-            MedicationModel medication;
             try
             {
                 StockUtils.Convert_Numeral(UpdatePriceTextBox.Text);
                 StockUtils.Convert_Numeral(UpdateQuantityTextBox.Text);
 
-                Id = StockUtils.Convert_Numeral(UpdateIdTextBox.Text);                
-                medication = StockUtils.Find_Medication(Id, ShownMedications);
-                if (medication == null) return;
+                Id = StockUtils.Convert_Numeral(UpdateIdTextBox.Text);
+                if (StockUtils.Find_Medication(Id, ShownMedications) == null) return;
             } catch (Exception)
             { 
                 return;
             }
+            Update_Input_Sources();
+            MedicationModel medication = StockUtils.Find_Medication(Id, ShownMedications);
             SQLiteDataAccess.UpdateMedication(medication);
-
-            Update_Input_Sources();            
 
             MedicationsDataGrid.UnselectAll();
         }

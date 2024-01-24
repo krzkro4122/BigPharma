@@ -32,15 +32,16 @@ namespace BigPharmaEngine
             }
         }
 
-        public static void UpdateMedication(MedicationModel medication)
+        public static MedicationModel UpdateMedication(MedicationModel medication)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
             {
-                cnn.Execute
+                var output = cnn.QuerySingle<MedicationModel>
                 (
-                    "UPDATE Medications SET Name = @Name, Price = @Price, Quantity = @Quantity, Description = @Description WHERE Id = @Id",
+                    "UPDATE Medications SET Name = @Name, Price = @Price, Quantity = @Quantity, Description = @Description WHERE Id=@Id RETURNING *",
                     medication
                 );
+                return output;
             }
         }
 
