@@ -87,37 +87,37 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="2*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <DockPanel Grid.Row="0">
-                            <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:" Height="34" Width="112"/>
-                            <TextBox IsEnabled="False" Foreground="Black" Margin="5" FontSize="18" Text="{Binding SelectedItem.Name, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9" TextChanged="TextBox_TextChanged"></TextBox>
+                        <DockPanel>
+                            <DockPanel>
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id:" Height="34"/>
+                                <TextBox IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedItem.Id, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9" Width="85"/>
+                            </DockPanel>
+                            <DockPanel Margin="10, 0, 0, 0" Grid.Row="0">
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:" Height="34" Width="112" HorizontalAlignment="Left"/>
+                                <TextBox Name="UpdateNameTextBox" IsEnabled="False" Foreground="Black" FontSize="18" Text="{Binding SelectedItem.Name, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9" TextChanged="UpdateNameTextBox_TextChanged"></TextBox>
+                            </DockPanel>
                         </DockPanel>
-                        <DockPanel Grid.RowSpan="2" Margin="0,50,0,0">
+                        <DockPanel Grid.Row="2" Grid.RowSpan="1">
                             <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description:" Height="34"/>
-                            <TextBox IsEnabled="False" TextWrapping="Wrap" FontSize="16" Margin="5" Padding="0,7,0,0" Foreground="Black" Text="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}" Width="404" Height="90" Background="#FFDCDCD9"/>
+                            <TextBox Name="UpdateDescriptionTextBox" IsEnabled="False" TextWrapping="Wrap" FontSize="16" Padding="0,7,0,0" Foreground="Black" Text="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}" Width="404" Height="90" Background="#FFDCDCD9" TextChanged="UpdateDescriptionTextBox_TextChanged"/>
                         </DockPanel>
-                        <Grid Grid.Row="2">
+                        <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="10"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="10"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <DockPanel>
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id:" Height="30"/>
-                                <TextBox IsEnabled="False" FontSize="16" Margin="5" Foreground="Black" Text="{Binding SelectedItem.Id, ElementName=MedicationsDataGrid}" Height="31" Background="#FFDCDCD9"/>
+                            <DockPanel Grid.Column="0">
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price:" Height="34"/>
+                                <TextBox Name="UpdatePriceTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedItem.Price, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9"/>
                             </DockPanel>
                             <DockPanel Grid.Column="2">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price:" Height="30"/>
-                                <TextBox IsEnabled="False" FontSize="16" Margin="5" Foreground="Black" Text="{Binding SelectedItem.Price, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9"/>
-                            </DockPanel>
-                            <DockPanel Grid.Column="4">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity:" Height="33"/>
-                                <TextBox IsEnabled="False" FontSize="16" Margin="5" Foreground="Black" Text="{Binding SelectedItem.Quantity, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9"/>
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity:" Height="34"/>
+                                <TextBox Name="UpdateQuantityTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedItem.Quantity, ElementName=MedicationsDataGrid}" Height="30" Background="#FFDCDCD9"/>
                             </DockPanel>
                         </Grid>
                         <Grid Grid.Row="3" Margin="0,20,0,0">
@@ -135,7 +135,7 @@
         <StackPanel Margin="30,30,30,30" Grid.Column="1">
             <DockPanel>
                 <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Medication list</Label>
-                <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Padding="0,5,0,0" RenderTransformOrigin="0.629,-1.213" />
+                <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Padding="0,5,5 ,0" RenderTransformOrigin="0.629,-1.213" />
                 <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="18" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
             </DockPanel>
             <DataGrid Margin="0, 20, 0, 0" Name="MedicationsDataGrid" ItemsSource="{Binding ShownMedications}" AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" AlternatingRowBackground="WhiteSmoke" Height="796" IsReadOnly="True" ScrollViewer.CanContentScroll="True" Background="#FFDCDCD9">

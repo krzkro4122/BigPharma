@@ -36,21 +36,32 @@ namespace BigPharma
             }
         }
 
-        private void AddMedication_Click(object sender, RoutedEventArgs e) => Handle_Add_Medication();
+        private void AddMedication_Click(object sender, RoutedEventArgs e) 
+            => Handle_Add_Medication();
 
         private void DeleteMedication_Click(object sender, RoutedEventArgs e)
-        => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+            => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
 
         private void UpdateMedication_Click(object sender, RoutedEventArgs e)
-        => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+            => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
 
-        private void ResetForm_Click(object sender, RoutedEventArgs e) => Clear_Form_Inputs();
+        private void ResetForm_Click(object sender, RoutedEventArgs e) 
+            => Clear_Form_Inputs();
 
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => Filter_Shown_Medications();
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) 
+            => Filter_Shown_Medications();
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void UpdateNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+            string content = UpdateNameTextBox.Text;
+
+            if (string.IsNullOrEmpty(content))
+            {
+                DisableUpdateInputs();
+            } else
+            {
+                EnableUpdateInputs();
+            }
         }
 
         private void Handle_Add_Medication()
@@ -142,6 +153,22 @@ namespace BigPharma
             MedicationPrice.Text = "";
             MedicationQuantity.Text = "";
             MedicationDescription.Text = "";
+        }
+
+        private void EnableUpdateInputs()
+        {
+            UpdateNameTextBox.IsEnabled = true;
+            UpdateDescriptionTextBox.IsEnabled = true;
+            UpdatePriceTextBox.IsEnabled = true;
+            UpdateQuantityTextBox.IsEnabled = true;
+        }
+
+        private void DisableUpdateInputs()
+        {
+            UpdateNameTextBox.IsEnabled = false;
+            UpdateDescriptionTextBox.IsEnabled = false;
+            UpdatePriceTextBox.IsEnabled = false;
+            UpdateQuantityTextBox.IsEnabled = false;
         }
 
         private void AddMedicationInternal(MedicationModel medication)
