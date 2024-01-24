@@ -16,10 +16,10 @@ namespace BigPharmaEngine
 
         public static int Convert_Numeral(string priceText) => Int32.Parse(priceText);
 
-        private static bool Criterion_Is_Empty(string criterion) => criterion.Length == 0;        
+        public static bool Criterion_Is_Empty(string criterion) => criterion.Length == 0;        
 
-        private static bool Property_Contains_Criterion(string Property, string criterion)
-            => Property.ToLower().Contains(criterion.ToLower());        
+        public static bool Property_Contains_Criterion(string property, string criterion)
+            => property.ToLower().Contains(criterion.ToLower());        
 
         public static MedicationModel? Find_Medication(int Id, Collection<MedicationModel> medications)
         {
