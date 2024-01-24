@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:components="clr-namespace:BigPharma.Components"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
         Title="BigPharma - Stock Manager" Height="835" Width="1076"
@@ -92,11 +93,21 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Horizontal">
                             <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:"/>
-                            <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Name, ElementName=MedicationsDataGrid}"/>
+                            <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Name}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.RowSpan="2" Margin="0,41,0,0">
                             <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description:" Height="82" VerticalAlignment="Center"/>
-                            <TextBlock TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Padding="0,7,0,0" Foreground="Gainsboro" FontSize="18" Text="{Binding SelectedItem.Description, ElementName=MedicationsDataGrid}" Width="246" Height="83" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="DeleteDescription"
+                                       TextWrapping="Wrap" 
+                                       TextTrimming="CharacterEllipsis" 
+                                       Padding="0,7,0,0" 
+                                       Foreground="Gainsboro"
+                                       FontSize="18"
+                                       Text="{Binding SelectedMedication.Description}"
+                                       Width="246"
+                                       Height="83"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"/>
                         </StackPanel>
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
@@ -108,15 +119,15 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal">
                                 <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Id, ElementName=MedicationsDataGrid}"/>
+                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Id}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2" Orientation="Horizontal">
                                 <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Price, ElementName=MedicationsDataGrid}"/>
+                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Price}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="4" Orientation="Horizontal">
                                 <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedItem.Quantity, ElementName=MedicationsDataGrid}"/>
+                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Quantity}"/>
                             </StackPanel>
                         </Grid>
                         <Button Grid.Row="5" x:Name="DeleteMedication"  Width="135" Height="40" FontSize="16" Click="DeleteMedication_Click" Content="_Delete" VerticalAlignment="Top"/>
@@ -124,21 +135,10 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        <StackPanel Margin="30,30,30,30" Grid.Column="1">
-            <DockPanel>
-                <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Medication list</Label>
-                <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Padding="0,5,0,0" RenderTransformOrigin="0.629,-1.213" />
-                <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="18" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
-            </DockPanel>
-            <DataGrid Margin="0, 20, 0, 0" Name="MedicationsDataGrid" ItemsSource="{Binding ShownMedications}" AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" AlternatingRowBackground="WhiteSmoke" Height="697" IsReadOnly="True" ScrollViewer.CanContentScroll="True" Background="#FFDCDCD9">
-                <DataGrid.Columns >
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="3*"/>
-                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="2*"/>
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="8*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
+        <components:MedicationBrowserComponent 
+            Grid.Column="1" 
+            MedicationClicked="{Binding SelectionChangedHandler}"
+            Medications="{Binding AllMedications}">
+        </components:MedicationBrowserComponent>
     </Grid>
 </Window>

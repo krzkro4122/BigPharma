@@ -1,23 +1,34 @@
-﻿    using BigPharmaEngine;
+﻿using BigPharmaEngine;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
 
 namespace BigPharma
 {
-    public partial class StockManager : Window
+    public sealed partial class StockManager : Window, INotifyPropertyChanged
     {
+        private MedicationModel selectedMedication;
+        public MedicationModel SelectedMedication
+        {
+            get => selectedMedication; 
+            private set => SetField(ref selectedMedication, value);
+        }
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
-        public ObservableCollection<MedicationModel> ShownMedications { get; set; } = new();
 
         public StockManager()
         {
             InitializeComponent();
             LoadMedicationList();
+            SelectionChangedHandler = medication =>
+            {
+                SelectedMedication = medication;
+            };
         }
 
         private void LoadMedicationList()
@@ -25,7 +36,6 @@ namespace BigPharma
             foreach (var medication in SQLiteDataAccess.LoadMedictaions())
             {
                 AllMedications.Add(medication);
-                ShownMedications.Add(medication);
             }
         }
 
@@ -65,30 +75,12 @@ namespace BigPharma
 
         private void DeleteMedication_Click(object sender, RoutedEventArgs e)
         {
-            DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);                        
+            DeleteMedicationInternal(SelectedMedication);                        
         }
 
         private void ResetForm_Click(object sender, RoutedEventArgs e)
         {
             Clear_Form_Inputs();
-        }
-
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            ShownMedications.Clear();
-
-            string criterion = SearchBox.Text;
-            bool theresNoCriterion = criterion.Length == 0;
-
-            foreach (var medication in AllMedications)
-            {
-                bool nameContainsCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
-                bool descriptionContainsCrtierion = medication.Description.ToLower().Contains(criterion.ToLower());
-                if (theresNoCriterion || nameContainsCrtierion || descriptionContainsCrtierion)
-                {
-                    ShownMedications.Add(medication);
-                }
-            }
         }
 
         private int Parse_Price(string priceText)
@@ -172,19 +164,7 @@ namespace BigPharma
                     Quantity = medication.Quantity,
                 }
             );
-
-            string criterion = SearchBox.Text;
-            bool theresNoSearchBoxCriterion = criterion.Length == 0;
-            bool satisfiesCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
-
-            if (theresNoSearchBoxCriterion || satisfiesCrtierion)
-            {
-                AllMedications.Add(addedMedication);
-                ShownMedications.Add(addedMedication);
-            } else if (!satisfiesCrtierion)
-            {
-                AllMedications.Add(addedMedication);
-            }            
+            AllMedications.Add(addedMedication);
         }
 
         private void DeleteMedicationInternal(MedicationModel medication)
@@ -194,8 +174,28 @@ namespace BigPharma
                 // Not atomic, whatever
                 SQLiteDataAccess.DeleteMedication(medication);
                 AllMedications.Remove(medication);
-                ShownMedications.Remove(medication);
             }
+        }
+
+        private Action<MedicationModel> selectionChangedHandler;
+        public Action<MedicationModel> SelectionChangedHandler { get => selectionChangedHandler; set => SetField(ref selectionChangedHandler, value); }
+        
+        /// <summary>
+        /// INotifyPropertyChanged stuff
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }

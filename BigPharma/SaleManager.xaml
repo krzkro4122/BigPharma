@@ -3,10 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:components="clr-namespace:BigPharma.Components"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
         Title="AuthWindow" Height="450" Width="800" Background="#FF333333" Closing="OnClosing">
+    <Window.DataContext>
+        <Binding RelativeSource="{RelativeSource Self}"/>
+    </Window.DataContext>
     <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="80" Foreground="LimeGreen" FontFamily="Nirmala UI">#TODO</TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="471*"></ColumnDefinition>
+            <ColumnDefinition Width="605*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <components:OrderBrowserComponent x:Name="OrdersView"
+            Grid.Column="1"
+            Orders="{Binding AllOrders}"
+            OrderClicked="{Binding OrderClickedHandler}"
+            />
+        <components:MedicationBrowserComponent x:Name="MedicationsView"
+                                    Grid.Column="1"
+                                    Medications="{Binding AllMedications}"
+                                    MedicationClicked="{Binding MedicationClickedHandler}"/>
     </Grid>
 </Window>
