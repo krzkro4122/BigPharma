@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="AuthWindow" Height="450" Width="800" Background="#FF333333" Closing="OnClosing">
+        Title="Summaries" Height="450" Width="800" Background="#FF333333" Closing="OnClosing">
     <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="80" Foreground="LimeGreen" FontFamily="Nirmala UI">#TODO</TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <!-- Add more RowDefinitions if needed for additional fields -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Field 1: Numerical Value -->
+        <StackPanel Grid.Row="0" Margin="10">
+            <TextBlock FontSize="20" Foreground="#FFF9F6F6">Najpopularniejszy lek:</TextBlock>
+            <TextBlock FontSize="30" Foreground="LimeGreen" Name="Field1Value" />
+        </StackPanel>
+
+        <!-- Field 2: Text Value -->
+        <StackPanel Grid.Row="1" Margin="10">
+            <TextBlock FontSize="20" Foreground="#FFF9F6F6">Największe zaopatrzenie:</TextBlock>
+            <TextBlock FontSize="15" Foreground="LimeGreen" Name="Field2Value" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="10">
+            <TextBlock FontSize="20" Foreground="#FFF9F6F6">Konto apteki:</TextBlock>
+            <TextBlock FontSize="30" Foreground="LimeGreen" Name="Field3Value" />
+        </StackPanel>
+        <StackPanel Grid.Row="3" Margin="10">
+            <TextBlock FontSize="20" Foreground="#FFF9F6F6">Wartość największego zamówienia:</TextBlock>
+            <TextBlock FontSize="30" Foreground="LimeGreen" Name="Field4Value" />
+        </StackPanel>
+
+        <!-- Return Button -->
+        <Button Grid.Row="4" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="ReturnButton_Click">Wróć</Button>
     </Grid>
 </Window>
