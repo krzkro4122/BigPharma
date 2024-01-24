@@ -1,11 +1,9 @@
-﻿    using BigPharmaEngine;
+﻿using BigPharmaEngine;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 
 namespace BigPharma
 {
@@ -38,110 +36,88 @@ namespace BigPharma
             }
         }
 
-        private void AddMedication_Click(object sender, RoutedEventArgs e)
+        private void AddMedication_Click(object sender, RoutedEventArgs e) => Handle_Add_Medication();
+
+        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
+        => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+
+        private void ResetForm_Click(object sender, RoutedEventArgs e) => Clear_Form_Inputs();
+
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => Filter_Shown_Medications();
+
+        private void Handle_Add_Medication()
         {
             Clear_Warning_Labels();
 
-            int price = Parse_Price(MedicationPrice.Text);
-            int quantity = Parse_Quantity(MedicationQuantity.Text);
-            string name = Parse_Name(MedicationName.Text);
-            string description = Parse_Name(MedicationDescription.Text);
+            int? price = Handle_Price(MedicationPrice.Text);
+            int? quantity = Handle_Quantity(MedicationQuantity.Text);
+            string name = Handle_Name(MedicationName.Text);
+            string description = MedicationDescription.Text;
 
-            bool priceAndNameAreInvalid = price == -1 || name == "-1";
-            if (priceAndNameAreInvalid) return;            
+            bool AnyOfTheFieldsIsInvalid = 
+                price == null || 
+                quantity == null || 
+                name == null;
+
+            if (AnyOfTheFieldsIsInvalid) return;
 
             AddMedicationInternal(
                 new MedicationModel()
                 {
                     Name = name,
-                    Price = price,
+                    Price = (int) price,
                     Description = description,
-                    Quantity = quantity,
+                    Quantity = (int) quantity,
                 }
             );
 
             Clear_Form_Inputs();
         }
 
-        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
-        {
-            DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);                        
-        }
-
-        private void ResetForm_Click(object sender, RoutedEventArgs e)
-        {
-            Clear_Form_Inputs();
-        }
-
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Filter_Shown_Medications()
         {
             ShownMedications.Clear();
-
             string criterion = SearchBox.Text;
-            bool theresNoCriterion = criterion.Length == 0;
 
-            foreach (var medication in AllMedications)
-            {
-                bool nameContainsCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
-                bool descriptionContainsCrtierion = medication.Description.ToLower().Contains(criterion.ToLower());
-                if (theresNoCriterion || nameContainsCrtierion || descriptionContainsCrtierion)
-                {
-                    ShownMedications.Add(medication);
-                }
-            }
+            foreach (var medication in AllMedications)            
+                if (StockUtils.Satisfies_Criterion(medication, criterion)) ShownMedications.Add(medication);                            
         }
 
-        private int Parse_Price(string priceText)
-        {
-            if (string.IsNullOrEmpty(priceText))
-            {
-                PriceWarningLabel.Content = "Empty price!";
-                return -1;
-            }
-
+        private int? Handle_Price(string text)
+        {            
             try
             {
-                return Convert_Numeral(priceText);
+                return StockUtils.Convert_Numeral(text);
             } catch (Exception)
             {
-                PriceWarningLabel.Content = "Wrong price!";
-                return -1;
+                if (string.IsNullOrEmpty(text)) PriceWarningLabel.Content = "Empty price!";
+                else PriceWarningLabel.Content = "Wrong format!";
+                return null;
             }
         }
 
-        private int Parse_Quantity(string priceText)
-        {
-            if (string.IsNullOrEmpty(priceText))
-            {
-                QuantityWarningLabel.Content = "Empty price!";
-                return -1;
-            }
-
+        private int? Handle_Quantity(string text)
+        {            
             try
             {
-                return Convert_Numeral(priceText);
+                return StockUtils.Convert_Numeral(text);
             }
             catch (Exception)
             {
-                QuantityWarningLabel.Content = "Wrong price!";
-                return -1;
+                if (string.IsNullOrEmpty(text)) QuantityWarningLabel.Content = "Empty quantity!";
+                else QuantityWarningLabel.Content = "Wrong format!";
+                return null;
             }
         }
 
-        private string Parse_Name(string nameText)
+        private string Handle_Name(string text)
         {
-            if (string.IsNullOrEmpty(nameText))
+            if (string.IsNullOrEmpty(text))
             {
                 NameWarningLabel.Content = "Empty name!";
-                return "-1";
+                return null;
             }
-
-            return nameText;
-        }
-
-        private int Convert_Numeral(string priceText)
-        {
-            return Int32.Parse(priceText);
+            return text;
         }
 
         private void Clear_Warning_Labels()
@@ -174,24 +150,21 @@ namespace BigPharma
             );
 
             string criterion = SearchBox.Text;
-            bool theresNoSearchBoxCriterion = criterion.Length == 0;
-            bool satisfiesCrtierion = medication.Name.ToLower().Contains(criterion.ToLower());
 
-            if (theresNoSearchBoxCriterion || satisfiesCrtierion)
+            if (StockUtils.Satisfies_Criterion(medication, criterion))
             {
                 AllMedications.Add(addedMedication);
                 ShownMedications.Add(addedMedication);
-            } else if (!satisfiesCrtierion)
+            } else 
             {
                 AllMedications.Add(addedMedication);
-            }            
+            }                        
         }
 
         private void DeleteMedicationInternal(MedicationModel medication)
         {
             if (medication != null)
             {
-                // Not atomic, whatever
                 SQLiteDataAccess.DeleteMedication(medication);
                 AllMedications.Remove(medication);
                 ShownMedications.Remove(medication);
