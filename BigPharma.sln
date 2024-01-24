@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigPharma", "BigPharma\BigPharma.csproj", "{9455323A-C88B-4169-B17C-F722F32C2121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigPharma", "BigPharma\BigPharma.csproj", "{9455323A-C88B-4169-B17C-F722F32C2121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigPharmaEngine", "BigPharmaEngine\BigPharmaEngine.csproj", "{FB06ADB3-D53F-4F1A-B7FD-E625C63D8427}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BigPharmaEngine", "BigPharmaEngine\BigPharmaEngine.csproj", "{FB06ADB3-D53F-4F1A-B7FD-E625C63D8427}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BigPharmaTests", "BigPharmaTests\BigPharmaTests.csproj", "{350D73DC-4105-40E6-B04C-39DF54084B95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FB06ADB3-D53F-4F1A-B7FD-E625C63D8427}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB06ADB3-D53F-4F1A-B7FD-E625C63D8427}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB06ADB3-D53F-4F1A-B7FD-E625C63D8427}.Release|Any CPU.Build.0 = Release|Any CPU
+		{350D73DC-4105-40E6-B04C-39DF54084B95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{350D73DC-4105-40E6-B04C-39DF54084B95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{350D73DC-4105-40E6-B04C-39DF54084B95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{350D73DC-4105-40E6-B04C-39DF54084B95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

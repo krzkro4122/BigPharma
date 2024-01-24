@@ -21,7 +21,7 @@ namespace BigPharmaEngine
         private static bool Property_Contains_Criterion(string Property, string criterion)
             => Property.ToLower().Contains(criterion.ToLower());        
 
-        public static MedicationModel? Find_Medication(int Id, ObservableCollection<MedicationModel> medications)
+        public static MedicationModel? Find_Medication(int Id, Collection<MedicationModel> medications)
         {
             foreach (var medication in medications)            
                 if (medication.Id == Id) 
