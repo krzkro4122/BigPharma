@@ -41,9 +41,17 @@ namespace BigPharma
         private void DeleteMedication_Click(object sender, RoutedEventArgs e)
         => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
 
+        private void UpdateMedication_Click(object sender, RoutedEventArgs e)
+        => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+
         private void ResetForm_Click(object sender, RoutedEventArgs e) => Clear_Form_Inputs();
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => Filter_Shown_Medications();
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            
+        }
 
         private void Handle_Add_Medication()
         {
@@ -148,17 +156,10 @@ namespace BigPharma
                     Quantity = medication.Quantity,
                 }
             );
+            AllMedications.Add(addedMedication);
 
             string criterion = SearchBox.Text;
-
-            if (StockUtils.Satisfies_Criterion(medication, criterion))
-            {
-                AllMedications.Add(addedMedication);
-                ShownMedications.Add(addedMedication);
-            } else 
-            {
-                AllMedications.Add(addedMedication);
-            }                        
+            if (StockUtils.Satisfies_Criterion(medication, criterion)) ShownMedications.Add(addedMedication);
         }
 
         private void DeleteMedicationInternal(MedicationModel medication)
