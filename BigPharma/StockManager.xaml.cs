@@ -2,8 +2,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace BigPharma
 {
@@ -40,10 +42,10 @@ namespace BigPharma
             => Handle_Add_Medication();
 
         private void DeleteMedication_Click(object sender, RoutedEventArgs e)
-            => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+            => Handle_Delete_Medication();
 
         private void UpdateMedication_Click(object sender, RoutedEventArgs e)
-            => DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+            => Handle_Medication_Update();
 
         private void ResetForm_Click(object sender, RoutedEventArgs e) 
             => Clear_Form_Inputs();
@@ -51,9 +53,9 @@ namespace BigPharma
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) 
             => Filter_Shown_Medications();
 
-        private void UpdateNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void UpdateIdTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string content = UpdateNameTextBox.Text;
+            string content = UpdateIdTextBox.Text;
 
             if (string.IsNullOrEmpty(content))
             {
@@ -90,6 +92,29 @@ namespace BigPharma
                 }
             );
 
+            Clear_Form_Inputs();
+        }
+
+        private void Handle_Delete_Medication()
+        {
+            Clear_Form_Inputs();
+            DeleteMedicationInternal((MedicationModel)MedicationsDataGrid.SelectedItem);
+        }
+
+        private void Handle_Medication_Update()
+        {
+            try
+            {
+                int Id = StockUtils.Convert_Numeral(UpdateIdTextBox.Text);
+            } catch (FormatException)
+            { 
+                return;
+            }
+
+            var medication = AllMedications.Select(m => m.Id).First();
+
+
+            Update_Input_Sources();
             Clear_Form_Inputs();
         }
 
@@ -153,6 +178,19 @@ namespace BigPharma
             MedicationPrice.Text = "";
             MedicationQuantity.Text = "";
             MedicationDescription.Text = "";
+        }
+
+        private void Update_Input_Sources()
+        {
+            BindingExpression nameBinding = UpdateNameTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression descriptionBinding = UpdateDescriptionTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression priceBinding = UpdatePriceTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression quantityBinding = UpdateQuantityTextBox.GetBindingExpression(TextBox.TextProperty);                
+
+            nameBinding.UpdateSource();
+            descriptionBinding.UpdateSource();
+            priceBinding.UpdateSource();
+            quantityBinding.UpdateSource();
         }
 
         private void EnableUpdateInputs()
