@@ -1,4 +1,6 @@
-﻿namespace BigPharmaEngine
+﻿using System.Collections.ObjectModel;
+
+namespace BigPharmaEngine
 {
     public class StockUtils
     {
@@ -18,5 +20,13 @@
 
         private static bool Property_Contains_Criterion(string Property, string criterion)
             => Property.ToLower().Contains(criterion.ToLower());        
+
+        public static MedicationModel? Find_Medication(int Id, ObservableCollection<MedicationModel> medications)
+        {
+            foreach (var medication in medications)            
+                if (medication.Id == Id) 
+                    return medication;             
+            return null;
+        }
     }
 }

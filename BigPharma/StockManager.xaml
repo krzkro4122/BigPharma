@@ -143,7 +143,7 @@
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="3*"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="5*"/>
                     <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="3*"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="3*"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="3.5*"/>
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="18*"/>
                 </DataGrid.Columns>
             </DataGrid>

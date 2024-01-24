@@ -22,6 +22,9 @@ namespace BigPharma
 
         private void LoadMedicationList()
         {
+            AllMedications.Clear();
+            ShownMedications.Clear();  
+
             foreach (var medication in SQLiteDataAccess.LoadMedictaions())
             {
                 AllMedications.Add(medication);
@@ -103,19 +106,25 @@ namespace BigPharma
 
         private void Handle_Medication_Update()
         {
+            int Id;
+            MedicationModel medication;
             try
             {
-                int Id = StockUtils.Convert_Numeral(UpdateIdTextBox.Text);
-            } catch (FormatException)
+                StockUtils.Convert_Numeral(UpdatePriceTextBox.Text);
+                StockUtils.Convert_Numeral(UpdateQuantityTextBox.Text);
+
+                Id = StockUtils.Convert_Numeral(UpdateIdTextBox.Text);                
+                medication = StockUtils.Find_Medication(Id, ShownMedications);
+                if (medication == null) return;
+            } catch (Exception)
             { 
                 return;
             }
+            SQLiteDataAccess.UpdateMedication(medication);
 
-            var medication = AllMedications.Select(m => m.Id).First();
+            Update_Input_Sources();            
 
-
-            Update_Input_Sources();
-            Clear_Form_Inputs();
+            MedicationsDataGrid.UnselectAll();
         }
 
         private void Filter_Shown_Medications()

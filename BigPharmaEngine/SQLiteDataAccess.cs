@@ -32,6 +32,18 @@ namespace BigPharmaEngine
             }
         }
 
+        public static void UpdateMedication(MedicationModel medication)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                cnn.Execute
+                (
+                    "UPDATE Medications SET Name = @Name, Price = @Price, Quantity = @Quantity, Description = @Description WHERE Id = @Id",
+                    medication
+                );
+            }
+        }
+
         public static void DeleteMedication(MedicationModel medication)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
