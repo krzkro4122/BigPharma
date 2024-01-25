@@ -34,8 +34,6 @@ namespace BigPharma.Components
             set => SetValue(medicationClickedDependencyProperty, value);
         }
 
-        public string SearchBarText { get; set; }
-
         public MedicationBrowserComponent()
         {
             InitializeComponent();
@@ -75,7 +73,7 @@ namespace BigPharma.Components
             {
                 return;
             }
-            var medication = e.AddedItems[0] as MedicationModel;
+            if(e.AddedItems[0] is not MedicationModel medication) return;
             MedicationClicked(medication);
         }
     }

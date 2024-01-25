@@ -10,12 +10,12 @@ using BigPharmaEngine.Models.Extensions;
 
 namespace BigPharma
 {
-    public partial class SaleManager : Window, INotifyPropertyChanged
+    public sealed partial class SaleManager : Window, INotifyPropertyChanged
     {
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
-        public MedicationModel SelectedMedication { get; set; } = null;
+        private MedicationModel? SelectedMedication { get; set; } = null;
         public ObservableCollection<OrderModel> AllOrders { get; set; } = new();
-        public OrderModel SelectedOrder { get; set; } = null;
+        private OrderModel? SelectedOrder { get; set; } = null;
 
         private int quantityToOrder = 0;
         public int QuantityToOrder
@@ -88,51 +88,49 @@ namespace BigPharma
             }
         }
 
-        private Action<MedicationModel> medicationClickedHandler;
-        public Action<MedicationModel> MedicationClickedHandler { get => medicationClickedHandler; private set => SetField(ref medicationClickedHandler, value); }
+        private Action<MedicationModel>? medicationClickedHandler;
+        public Action<MedicationModel>? MedicationClickedHandler { get => medicationClickedHandler; private set => SetField(ref medicationClickedHandler, value); }
 
-        private Action<OrderModel> orderClickedHandler;
-        public Action<OrderModel> OrderClickedHandler { get => orderClickedHandler; private set => SetField(ref orderClickedHandler, value); }
+        private Action<OrderModel>? orderClickedHandler;
+        public Action<OrderModel>? OrderClickedHandler { get => orderClickedHandler; private set => SetField(ref orderClickedHandler, value); }
         public string FinishOrderLabelContent => SelectedOrder is null ? "" : $"Selected order: {SelectedOrder.Id}";
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            if (sender.GetType() != typeof(MainWindow))
-            {
-                this.Hide();
-                e.Cancel = true;
-            }
+            if (sender.GetType() == typeof(MainWindow)) return;
+            this.Hide();
+            e.Cancel = true;
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
-            var canceledOrder = SelectedOrder.CreatePatch(order =>
+            var canceledOrder = SelectedOrder?.CreatePatch(order =>
             {
                 order.CompletionDate = DateTime.Now;
                 order.Status = OrderStatus.Canceled;
             });
+            if (canceledOrder is null) return; 
             SQLiteDataAccess.EditOrder(canceledOrder);
-            
             LoadOrderList();
         }
 
         private void Complete_OnClick(object sender, RoutedEventArgs e)
         {
-            var completedOrder = SelectedOrder.CreatePatch(order =>
+            var completedOrder = SelectedOrder?.CreatePatch(order =>
             {
                 order.CompletionDate = DateTime.Now;
                 order.Status = OrderStatus.Finalized;
             });
+            if(completedOrder is null) return;
             SQLiteDataAccess.EditOrder(completedOrder);
-            
             LoadOrderList();
         }
 
         private void CreateOrder_OnClick(object sender, RoutedEventArgs e)
         {
+            if(SelectedMedication is null) return;
             var updatedMedication =
                 SelectedMedication.CreatePatch(medication => medication.Quantity -= quantityToOrder);
-
             try
             {
                 SQLiteDataAccess.UpdateMedication(updatedMedication);
@@ -166,14 +164,14 @@ namespace BigPharma
         /// <summary>
         /// INotifyPropertyChanged stuff
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
