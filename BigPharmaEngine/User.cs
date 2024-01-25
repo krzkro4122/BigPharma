@@ -10,19 +10,19 @@ namespace BigPharmaEngine
     {
 
         public int Id { get; set; }
-        public string Username
+        public required string Username
         {
             get;
             set;
         }
 
-        public string Email
+        public required string Email
         {
             get;
             set;
         }
 
-        public string Password
+        public required string Password
         {
             get;
             set;
