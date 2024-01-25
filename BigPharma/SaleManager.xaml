@@ -6,7 +6,7 @@
         xmlns:components="clr-namespace:BigPharma.Components"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="SaleWindow" Height="450" Width="1000" Background="#FF333333" Closing="OnClosing">
+        Title="SaleWindow" Height="550" Width="1000" Background="#FF333333" Closing="OnClosing">
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>
     </Window.DataContext>
@@ -40,12 +40,14 @@
                                    FontSize="18">Quantity</Label>
                             <Label Name="DescriptionWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
                         </DockPanel>
-                        <TextBox Height="40" 
+                        <TextBox Height="40"
+                                 Text="{Binding QuantityToOrder}"
                                  Margin="10, 0, 10, 10"
                                  Padding="3" Name="MedicationDescription" 
                                  Background="#FFDCDCD9" 
                                  TextWrapping="Wrap"></TextBox>
                         <Button Name="CreateOrder"
+                                IsEnabled="{Binding NewOrderButtonsAvailability}"
                                 Click="CreateOrder_OnClick"
                                 Height="40"
                                 Margin="0, 0, 0, 0" 
@@ -55,7 +57,7 @@
             <GroupBox Grid.Row="1"
                       VerticalAlignment="Bottom"
                       Margin="0, 0, 0, 30"
-                      Padding="20, 0, 20, 20" Height="133">
+                      Padding="20, 0, 20, 20" Height="173">
                 <GroupBox.Header>
                     <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Finish order</Label>
                 </GroupBox.Header>
@@ -65,9 +67,25 @@
                         <ColumnDefinition></ColumnDefinition>
                         <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Button Name="Complete"
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.RowSpan="2"
+                           Grid.ColumnSpan="2"
+                           Foreground="Gainsboro"
+                           FontSize="15"
+                           MaxWidth="100"
+                           FontWeight="DemiBold" 
+                           TextWrapping="Wrap"
+                           Width="auto"
+                           Height="auto"
+                           Text="{Binding FinishOrderLabelContent}"/>
+                    <Button Grid.Row="1"
+                            Grid.Column="0" Name="Complete"
                             Click="Complete_OnClick"
-                            Background="Chartreuse"
+                            IsEnabled="{Binding FinishOrderButtonsAvailability}"
+                            Background="Green"
                             BorderThickness="3"
                             BorderBrush="White"
                             VerticalAlignment="Center"
@@ -76,8 +94,10 @@
                             Width="50"
                             Margin="0, 0, 0, 0"
                             FontSize="28">✔️</Button>
-                    <Button Grid.Column="1" Name="Cancel"
+                    <Button Grid.Row="1" 
+                            Grid.Column="1" Name="Cancel"
                             Click="Cancel_OnClick"
+                            IsEnabled="{Binding FinishOrderButtonsAvailability}"
                             Background="Brown"
                             BorderThickness="3"
                             BorderBrush="White"

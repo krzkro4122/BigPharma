@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
+using BigPharmaEngine.Models;
 
 namespace BigPharmaEngine
 {
@@ -44,6 +45,15 @@ namespace BigPharmaEngine
             }
         }
 
+        public static void EditMedication(MedicationModel medication)
+        {
+            using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
+            cnn.Execute(
+                "UPDATE MEDICATIONS SET Name = @Name, Quantity = @Quantity, Price = @Price, Description = @Description  WHERE ID = @Id",
+                medication
+            );
+        }
+
         public static IEnumerable<OrderModel> LoadOrders()
         {
             using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
@@ -62,6 +72,15 @@ namespace BigPharmaEngine
                 );
                 return output;
             }
+        }
+
+        public static void EditOrder(OrderModel order)
+        {
+            using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
+            cnn.Execute(
+                "UPDATE ORDERS SET STATUS = @Status, Quantity = @Quantity, Price = @Price, CompletionDate = @CompletionDate  WHERE ID = @Id",
+                order
+            );
         }
 
         public static void DeleteOrder(OrderModel order)

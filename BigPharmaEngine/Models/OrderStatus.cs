@@ -1,4 +1,4 @@
-namespace BigPharmaEngine;
+namespace BigPharmaEngine.Models;
 
 public enum OrderStatus
 {

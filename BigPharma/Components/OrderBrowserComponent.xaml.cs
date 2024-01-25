@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using BigPharmaEngine;
+using BigPharmaEngine.Models;
 
 namespace BigPharma.Components;
 
@@ -17,7 +18,7 @@ public partial class OrderBrowserComponent : UserControl
     private static readonly DependencyProperty orderClickedDependencyProperty =
         DependencyProperty.Register(
             nameof(OrderClicked),
-            typeof(Action<OrderModel>),   
+            typeof(Action<OrderModel?>),   
             typeof(OrderBrowserComponent));
 
     public ObservableCollection<OrderModel> Orders
@@ -26,9 +27,9 @@ public partial class OrderBrowserComponent : UserControl
         set => SetValue(ordersDependencyProperty, value);
     }
     
-    public Action<OrderModel> OrderClicked
+    public Action<OrderModel?> OrderClicked
     {
-        get => (Action<OrderModel>)GetValue(orderClickedDependencyProperty);
+        get => (Action<OrderModel?>)GetValue(orderClickedDependencyProperty);
         set => SetValue(orderClickedDependencyProperty, value);
     }
     
