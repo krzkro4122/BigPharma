@@ -16,7 +16,7 @@ namespace BigPharma
     public sealed partial class StockManager : Window, INotifyPropertyChanged
     {
         private MedicationModel selectedMedication;
-        public MedicationModel SelectedMedication
+        public MedicationModel? SelectedMedication
         {
             get => selectedMedication; 
             private set => SetField(ref selectedMedication, value);
@@ -83,7 +83,7 @@ namespace BigPharma
 
             int? price = Handle_Price(MedicationPrice.Text);
             int? quantity = Handle_Quantity(MedicationQuantity.Text);
-            string name = Handle_Name(MedicationName.Text);
+            string? name = Handle_Name(MedicationName.Text);
             string description = MedicationDescription.Text;
 
             bool AnyOfTheFieldsIsInvalid = 
@@ -154,7 +154,7 @@ namespace BigPharma
             }
         }
 
-        private string Handle_Name(string text)
+        private string? Handle_Name(string text)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -253,12 +253,12 @@ namespace BigPharma
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
