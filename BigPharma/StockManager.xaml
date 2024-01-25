@@ -6,35 +6,38 @@
         xmlns:components="clr-namespace:BigPharma.Components"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="BigPharma - Stock Manager" Height="835" Width="1076"
+        Title="BigPharma - Stock Manager" Height="935" Width="1176"
         Closing="OnClosing"
+        ContentRendered="Window_ContentRendered"   
+        GotFocus="StockManager_OnGotFocus"
         >
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>
     </Window.DataContext>
     <Grid Background="#FF333333">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="471*"></ColumnDefinition>
-            <ColumnDefinition Width="605*"></ColumnDefinition>
+            <ColumnDefinition Width="527*"></ColumnDefinition>
+            <ColumnDefinition Width="649*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid Margin="30,30,30,30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="11*"></RowDefinition>
-                <RowDefinition Height="0"></RowDefinition>
-                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <Label Foreground="Gainsboro" FontSize="24" FontWeight="Bold">Manage medications</Label>
-            <GroupBox Grid.Row="1" Padding="20, 10, 20, 20" Height="333">
+            <GroupBox Grid.Row="1" Padding="20, 10, 20, 20" Height="389" VerticalAlignment="Center">
                 <GroupBox.Header>
                     <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Add</Label>
                 </GroupBox.Header>
                 <StackPanel>
                     <DockPanel LastChildFill="False">
-                        <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Name</Label>
+                        <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18" FontWeight="Bold">Name</Label>
                         <Label Name="NameWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
                     </DockPanel>
-                    <TextBox Padding="3" Name="MedicationName" Background="Gainsboro"></TextBox>
+                    <TextBox Padding="3" Name="MedicationName" FontSize="16" Background="Gainsboro" Height="30"></TextBox>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -44,25 +47,25 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <DockPanel LastChildFill="False">
-                                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Price</Label>
+                                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18" FontWeight="Bold">Price</Label>
                                 <Label Name="PriceWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
                             </DockPanel>
-                            <TextBox Padding="3" Name="MedicationPrice" Background="#FFDCDCD9"></TextBox>
+                            <TextBox Padding="3" Name="MedicationPrice" FontSize="16" Background="#FFDCDCD9" Height="30"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Column="2">
                             <DockPanel LastChildFill="False">
-                                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Quantity</Label>
+                                <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18" FontWeight="Bold">Quantity</Label>
                                 <Label Name="QuantityWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
                             </DockPanel>
-                            <TextBox Padding="3" Name="MedicationQuantity" Background="#FFDCDCD9"></TextBox>
+                            <TextBox Padding="3" Name="MedicationQuantity" FontSize="16" Background="#FFDCDCD9" Height="30"></TextBox>
                         </StackPanel>
                     </Grid>
 
                     <DockPanel LastChildFill="False">
-                        <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18">Description</Label>
+                        <Label DockPanel.Dock="Left" Foreground="Gainsboro" FontSize="18" FontWeight="Bold">Description</Label>
                         <Label Name="DescriptionWarningLabel" DockPanel.Dock="Right" Foreground="Red" FontSize="15" VerticalAlignment="Bottom"></Label>
                     </DockPanel>
-                    <TextBox Height="40" Padding="3" Name="MedicationDescription" Background="#FFDCDCD9" TextWrapping="Wrap"></TextBox>
+                    <TextBox Height="90" Padding="3" FontSize="16" Name="MedicationDescription" Background="#FFDCDCD9" TextWrapping="Wrap"></TextBox>
 
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -71,13 +74,13 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Name="AddMedication" Width="135" Height="40" Margin="0, 20, 0, 0" Click="AddMedication_Click" FontSize="16">_Add</Button>
-                        <Button Grid.Column="2" Name="ResetAdditionFields" Width="135" Height="40" Margin="0, 20, 0, 0" Click="ResetForm_Click" FontSize="16" Background="#FF333333" Foreground="#FFDDDDDD" BorderThickness="2,2,2,2">_Reset</Button>
+                        <Button Grid.Column="2" Name="ResetAdditionFields" Width="135" Height="40" Margin="0, 20, 0, 0" Click="ResetForm_Click" FontSize="16" Background="#FF333333" Foreground="#FFDDDDDD" BorderThickness="2,2,2,2" FontWeight="Bold">_Reset</Button>
                     </Grid>
                 </StackPanel>
             </GroupBox>
             <GroupBox Grid.Row="3" Padding="20, 10, 20, 20">
                 <GroupBox.Header>
-                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold" Content="Delete"/>
+                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold" Content="Update/Delete"/>
                 </GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -87,50 +90,51 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="2*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name:"/>
-                            <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Name}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.RowSpan="2" Margin="0,41,0,0">
-                            <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description:" Height="82" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="DeleteDescription"
-                                       TextWrapping="Wrap" 
-                                       TextTrimming="CharacterEllipsis" 
-                                       Padding="0,7,0,0" 
-                                       Foreground="Gainsboro"
-                                       FontSize="18"
-                                       Text="{Binding SelectedMedication.Description}"
-                                       Width="246"
-                                       Height="83"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"/>
-                        </StackPanel>
-                        <Grid Grid.Row="2">
+                        <DockPanel>
+                            <DockPanel>
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id" Height="34"/>
+                                <TextBox Name="UpdateIdTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedMedication.Id}" Height="30" Background="#FFDCDCD9" Width="85" TextChanged="UpdateIdTextBox_TextChanged"/>
+                            </DockPanel>
+                            <DockPanel Margin="10, 0, 0, 0" Grid.Row="0">
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name" Height="34" Width="112" HorizontalAlignment="Left"/>
+                                <TextBox Name="UpdateNameTextBox"
+                                         IsEnabled="False"
+                                         Foreground="Black"
+                                         FontSize="16"
+                                         Text="{Binding SelectedMedication.Name}" Height="30" Background="#FFDCDCD9"></TextBox>
+                            </DockPanel>
+                        </DockPanel>
+                        <DockPanel Grid.Row="2" Grid.RowSpan="1">
+                            <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description" Height="34"/>
+                            <TextBox Name="UpdateDescriptionTextBox" IsEnabled="False" TextWrapping="Wrap" FontSize="16" Padding="0,7,0,0" Foreground="Black" Text="{Binding SelectedMedication.Description}" Background="#FFDCDCD9"/>
+                        </DockPanel>
+                        <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="10"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="10"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Id}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Price}"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="4" Orientation="Horizontal">
-                                <Label Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity:"/>
-                                <Label Foreground="Gainsboro" FontSize="18" Content="{Binding SelectedMedication.Quantity}"/>
-                            </StackPanel>
+                            <DockPanel Grid.Column="0">
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price" Height="34"/>
+                                <TextBox Name="UpdatePriceTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedMedication.Price}" Height="30" Background="#FFDCDCD9"/>
+                            </DockPanel>
+                            <DockPanel Grid.Column="2">
+                                <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity" Height="34"/>
+                                <TextBox Name="UpdateQuantityTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedMedication.Quantity}" Height="30" Background="#FFDCDCD9"/>
+                            </DockPanel>
                         </Grid>
-                        <Button Grid.Row="5" x:Name="DeleteMedication"  Width="135" Height="40" FontSize="16" Click="DeleteMedication_Click" Content="_Delete" VerticalAlignment="Top"/>
+                        <Grid Grid.Row="3" Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="UpdateMedication"  Width="135" Height="40" FontSize="16" Click="UpdateMedication_Click" Content="_Update" VerticalAlignment="Center"/>
+                            <Button Grid.Column="1" x:Name="DeleteMedication"  Width="135" Height="40" FontSize="16" Click="DeleteMedication_Click" Content="_Delete" VerticalAlignment="Center" BorderBrush="#FFC90000" BorderThickness="2,2,2,2" Background="#FF333333" Foreground="#FFC90000" FontWeight="Bold"/>
+                        </Grid>
                     </Grid>
                 </Grid>
             </GroupBox>

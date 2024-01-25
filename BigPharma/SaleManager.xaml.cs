@@ -135,7 +135,7 @@ namespace BigPharma
 
             try
             {
-                SQLiteDataAccess.EditMedication(updatedMedication);
+                SQLiteDataAccess.UpdateMedication(updatedMedication);
             }
             catch (Exception)
             {
@@ -156,7 +156,7 @@ namespace BigPharma
             }
             catch (Exception)
             {
-                SQLiteDataAccess.EditMedication(SelectedMedication);
+                SQLiteDataAccess.UpdateMedication(SelectedMedication);
                 return;
             }
             LoadMedicationList();
@@ -179,6 +179,18 @@ namespace BigPharma
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            LoadMedicationList();
+            LoadOrderList();
+        }
+
+        private void SaleManager_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            LoadMedicationList();
+            LoadOrderList();
         }
     }
 }

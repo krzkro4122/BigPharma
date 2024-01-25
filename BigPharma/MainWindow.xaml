@@ -5,21 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BigPharma"        
         mc:Ignorable="d"
-        Title="BigPharma" Height="450" Width="400" Foreground="Black" Background="#FF333333"          
+        Title="BigPharma 💊" Height="450" Width="400" Foreground="Black" Background="#FF333333"          
         Closing="OnClosing"
 >
-    <Grid Margin="80, 40">
+    <Grid Margin="80, 30">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center" Foreground="#FFEBE8E8" FontFamily="Courier New" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" LineHeight="7" Width="196">Big Pharma</TextBlock>
-        <Button Name="MenuAuthButton" Grid.Row="1" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Auth_Click" >_Authenticate</Button>
-        <Button IsHitTestVisible="False" Name="MenuStockButton" Grid.Row="2" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Stock_Click" Opacity="0.5" >Stock Manager</Button>
-        <Button IsHitTestVisible="False" Name="MenuSaleButton" Grid.Row="3" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Sale_Click" Opacity="0.5">Sale Manager</Button>
-        <Button IsHitTestVisible="False" Name="MenuSummariesButton" Grid.Row="4" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Summaries_Click" Opacity="0.5">Summaries</Button>
+        <TextBlock HorizontalAlignment="Center" Foreground="#FFEBE8E8" FontFamily="Courier New" FontSize="32" FontWeight="Bold" VerticalAlignment="Center" TextAlignment="Center" LineHeight="7" Width="196">Big Pharma 💊</TextBlock>
+        <Button Name="MenuAuthButton" Grid.Row="1" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Auth_Click" >_Authenticate 🔓</Button>
+        <Button IsHitTestVisible="False" Name="MenuStockButton" Grid.Row="2" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Stock_Click" Opacity="0.5" >Stock Manager 🔢</Button>
+        <Button IsHitTestVisible="False" Name="MenuSaleButton" Grid.Row="3" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Sale_Click" Opacity="0.5">Sale Manager 📈</Button>
+        <Button IsHitTestVisible="False" Name="MenuSummariesButton" Grid.Row="4" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="Open_Summaries_Click" Opacity="0.5">Summaries 📊</Button>
+        <TextBlock Grid.Row="5" FontFamily="Calibri" TextAlignment="Center" Foreground="#FFAEAEAE">Made by <Run Foreground="#FF3CA011">Level Designerzy</Run>®️</TextBlock>
     </Grid>
 </Window>

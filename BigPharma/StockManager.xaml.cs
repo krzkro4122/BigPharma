@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 using BigPharmaEngine.Models;
+using BigPharmaEngine.Models.Extensions;
 
 namespace BigPharma
 {
@@ -34,6 +33,8 @@ namespace BigPharma
 
         private void LoadMedicationList()
         {
+            AllMedications.Clear();
+
             foreach (var medication in SQLiteDataAccess.LoadMedictaions())
             {
                 AllMedications.Add(medication);
@@ -49,92 +50,107 @@ namespace BigPharma
             }
         }
 
-        private void AddMedication_Click(object sender, RoutedEventArgs e)
+        private void AddMedication_Click(object sender, RoutedEventArgs e) 
+            => Handle_Add_Medication();
+
+        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
+            => Handle_Delete_Medication();
+
+        private void UpdateMedication_Click(object sender, RoutedEventArgs e)
+            => Handle_Medication_Update();
+
+        private void ResetForm_Click(object sender, RoutedEventArgs e) 
+            => Clear_Form_Inputs();
+
+        private void UpdateIdTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string content = UpdateIdTextBox.Text;
+
+            if (string.IsNullOrEmpty(content))
+            {
+                DisableUpdateInputs();
+            } else
+            {
+                EnableUpdateInputs();
+            }
+        }
+
+        private void Handle_Add_Medication()
         {
             Clear_Warning_Labels();
 
-            int price = Parse_Price(MedicationPrice.Text);
-            int quantity = Parse_Quantity(MedicationQuantity.Text);
-            string name = Parse_Name(MedicationName.Text);
-            string description = Parse_Name(MedicationDescription.Text);
+            int? price = Handle_Price(MedicationPrice.Text);
+            int? quantity = Handle_Quantity(MedicationQuantity.Text);
+            string name = Handle_Name(MedicationName.Text);
+            string description = MedicationDescription.Text;
 
-            bool priceAndNameAreInvalid = price == -1 || name == "-1";
-            if (priceAndNameAreInvalid) return;            
+            bool AnyOfTheFieldsIsInvalid = 
+                price == null || 
+                quantity == null || 
+                name == null;
+
+            if (AnyOfTheFieldsIsInvalid) return;
 
             AddMedicationInternal(
                 new MedicationModel()
                 {
                     Name = name,
-                    Price = price,
+                    Price = (int) price,
                     Description = description,
-                    Quantity = quantity,
+                    Quantity = (int) quantity,
                 }
             );
 
             Clear_Form_Inputs();
         }
 
-        private void DeleteMedication_Click(object sender, RoutedEventArgs e)
-        {
-            DeleteMedicationInternal(SelectedMedication);                        
-        }
-
-        private void ResetForm_Click(object sender, RoutedEventArgs e)
+        private void Handle_Delete_Medication()
         {
             Clear_Form_Inputs();
+            DeleteMedicationInternal(SelectedMedication);
+        }
+        
+        private void Handle_Medication_Update()
+        {
+            UpdateMedicationInternal(SelectedMedication);
+            LoadMedicationList();
         }
 
-        private int Parse_Price(string priceText)
-        {
-            if (string.IsNullOrEmpty(priceText))
-            {
-                PriceWarningLabel.Content = "Empty price!";
-                return -1;
-            }
-
+        private int? Handle_Price(string text)
+        {            
             try
             {
-                return Convert_Numeral(priceText);
+                return StockUtils.Convert_Numeral(text);
             } catch (Exception)
             {
-                PriceWarningLabel.Content = "Wrong price!";
-                return -1;
+                if (string.IsNullOrEmpty(text)) PriceWarningLabel.Content = "Empty price!";
+                else PriceWarningLabel.Content = "Wrong format!";
+                return null;
             }
         }
 
-        private int Parse_Quantity(string priceText)
-        {
-            if (string.IsNullOrEmpty(priceText))
-            {
-                QuantityWarningLabel.Content = "Empty price!";
-                return -1;
-            }
-
+        private int? Handle_Quantity(string text)
+        {            
             try
             {
-                return Convert_Numeral(priceText);
+                return StockUtils.Convert_Numeral(text);
             }
             catch (Exception)
             {
-                QuantityWarningLabel.Content = "Wrong price!";
-                return -1;
+                if (string.IsNullOrEmpty(text)) QuantityWarningLabel.Content = "Empty quantity!";
+                else QuantityWarningLabel.Content = "Wrong format!";
+                return null;
             }
         }
 
-        private string Parse_Name(string nameText)
+        private string Handle_Name(string text)
         {
-            if (string.IsNullOrEmpty(nameText))
+            if (string.IsNullOrEmpty(text))
             {
                 NameWarningLabel.Content = "Empty name!";
-                return "-1";
+                return null;
             }
-
-            return nameText;
-        }
-
-        private int Convert_Numeral(string priceText)
-        {
-            return Int32.Parse(priceText);
+            return text;
         }
 
         private void Clear_Warning_Labels()
@@ -153,6 +169,22 @@ namespace BigPharma
             MedicationDescription.Text = "";
         }
 
+        private void EnableUpdateInputs()
+        {
+            UpdateNameTextBox.IsEnabled = true;
+            UpdateDescriptionTextBox.IsEnabled = true;
+            UpdatePriceTextBox.IsEnabled = true;
+            UpdateQuantityTextBox.IsEnabled = true;
+        }
+
+        private void DisableUpdateInputs()
+        {
+            UpdateNameTextBox.IsEnabled = false;
+            UpdateDescriptionTextBox.IsEnabled = false;
+            UpdatePriceTextBox.IsEnabled = false;
+            UpdateQuantityTextBox.IsEnabled = false;
+        }
+
         private void AddMedicationInternal(MedicationModel medication)
         {
             MedicationModel addedMedication = SQLiteDataAccess.SaveMedication
@@ -168,13 +200,18 @@ namespace BigPharma
             AllMedications.Add(addedMedication);
         }
 
+        private void UpdateMedicationInternal(MedicationModel patch)
+        {
+            SQLiteDataAccess.UpdateMedication(patch);
+        }
+        
         private void DeleteMedicationInternal(MedicationModel medication)
         {
             if (medication != null)
             {
-                // Not atomic, whatever
                 SQLiteDataAccess.DeleteMedication(medication);
                 AllMedications.Remove(medication);
+                SelectedMedication = null;
             }
         }
 
@@ -197,6 +234,16 @@ namespace BigPharma
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            LoadMedicationList();
+        }
+
+        private void StockManager_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            LoadMedicationList();
         }
     }
 }

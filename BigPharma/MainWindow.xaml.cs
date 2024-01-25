@@ -31,40 +31,40 @@ namespace BigPharma
 
         public void Unlock_Resources()
         {
-            MenuAuthButton.Content = "_Log out";
+            MenuAuthButton.Content = "_Log out 🔐";
             MenuAuthButton.Click -= Open_Auth_Click;
             MenuAuthButton.Click += Lock_Resources;
 
             MenuStockButton.IsHitTestVisible = true;
             MenuStockButton.Opacity = 1;
-            MenuStockButton.Content = "_Stock Manager";
+            MenuStockButton.Content = "_Stock Manager 🔢";
 
             MenuSaleButton.IsHitTestVisible = true;
             MenuSaleButton.Opacity = 1;
-            MenuSaleButton.Content = "S_ale Manager";
+            MenuSaleButton.Content = "S_ale Manager 📈";
 
             MenuSummariesButton.IsHitTestVisible = true;
             MenuSummariesButton.Opacity = 1;
-            MenuSummariesButton.Content = "S_ummaries";
+            MenuSummariesButton.Content = "S_ummaries 📊";
         }
 
         public void Lock_Resources(object sender, RoutedEventArgs e)
         {
-            MenuAuthButton.Content = "_Authenticate";
+            MenuAuthButton.Content = "_Authenticate 🔓";
             MenuAuthButton.Click -= Lock_Resources;
             MenuAuthButton.Click += Open_Auth_Click;
 
             MenuStockButton.IsHitTestVisible = false;
             MenuStockButton.Opacity = 0.5;
-            MenuStockButton.Content = "Stock Manager";
+            MenuStockButton.Content = "Stock Manager 🔢";
 
             MenuSaleButton.IsHitTestVisible = false;
             MenuSaleButton.Opacity = 0.5;
-            MenuSaleButton.Content = "Sale Manager";
+            MenuSaleButton.Content = "Sale Manager 📈";
 
             MenuSummariesButton.IsHitTestVisible = false;
             MenuSummariesButton.Opacity = 0.5;
-            MenuSummariesButton.Content = "Summaries";
+            MenuSummariesButton.Content = "Summaries 📊";
         }
 
         private void Open_Stock_Click(object sender, RoutedEventArgs e)
