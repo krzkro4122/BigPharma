@@ -110,6 +110,7 @@ namespace BigPharma
         {
             Clear_Form_Inputs();
             DeleteMedicationInternal(SelectedMedication);
+            LoadMedicationList();
         }
         
         private void Handle_Medication_Update()
@@ -240,7 +241,6 @@ namespace BigPharma
             if (medication != null)
             {
                 SQLiteDataAccess.DeleteMedication(medication);
-                AllMedications.Remove(medication);
                 SelectedMedication = null;
             }
         }
