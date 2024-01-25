@@ -240,10 +240,5 @@ namespace BigPharma
         {
             LoadMedicationList();
         }
-
-        private void StockManager_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            LoadMedicationList();
-        }
     }
 }

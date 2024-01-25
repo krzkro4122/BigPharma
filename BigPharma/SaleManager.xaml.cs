@@ -186,11 +186,5 @@ namespace BigPharma
             LoadMedicationList();
             LoadOrderList();
         }
-
-        private void SaleManager_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            LoadMedicationList();
-            LoadOrderList();
-        }
     }
 }

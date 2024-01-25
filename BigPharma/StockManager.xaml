@@ -8,8 +8,7 @@
         mc:Ignorable="d"
         Title="BigPharma - Stock Manager" Height="935" Width="1176"
         Closing="OnClosing"
-        ContentRendered="Window_ContentRendered"   
-        GotFocus="StockManager_OnGotFocus"
+        ContentRendered="Window_ContentRendered"
         >
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>

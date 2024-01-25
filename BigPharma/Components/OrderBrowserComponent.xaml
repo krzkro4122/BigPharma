@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:BigPharma.Components"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="400">
     
     <StackPanel Margin="30,30,30,30">
         <DockPanel>
@@ -22,11 +22,11 @@
                   IsReadOnly="True" ScrollViewer.CanContentScroll="True" 
                   Background="#FFDCDCD9">
             <DataGrid.Columns >
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
-                <DataGridTextColumn Header="MedicationId" Binding="{Binding MedicationId}" Width="13*"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="7*"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*"/>
-                <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="2*"/>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="10"/>
+                <DataGridTextColumn Header="MedicationId" Binding="{Binding MedicationId}" Width="100"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="50*"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="70"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="60"/>
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>
