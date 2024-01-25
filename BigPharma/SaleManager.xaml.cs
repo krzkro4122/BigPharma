@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using BigPharmaEngine;
@@ -10,7 +11,7 @@ using BigPharmaEngine.Models.Extensions;
 
 namespace BigPharma
 {
-    public sealed partial class SaleManager : Window, INotifyPropertyChanged
+    public sealed partial class SaleManager : INotifyPropertyChanged
     {
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
         private MedicationModel? SelectedMedication { get; set; } = null;
@@ -43,14 +44,20 @@ namespace BigPharma
             set => SetField(ref newOrderButtonsAvailability, value);
         }
 
-        private bool finishOrderButtonsAvailability = false;
-
-        public bool FinishOrderButtonsAvailability
+        private bool confirmOrderButtonsAvailability = false;
+        public bool ConfirmOrderButtonsAvailability
         {
             get => SelectedOrder is not null; 
-            set => SetField(ref finishOrderButtonsAvailability, value);
+            set => SetField(ref confirmOrderButtonsAvailability, value);
         }
-        
+
+        private bool finishTransactionButtonAvailability = false;
+        public bool FinishTransactionButtonAvailability
+        {
+            get => AllOrders.Any() && AllOrders.All(order => order.Status != OrderStatus.Created);
+            set => SetField(ref finishTransactionButtonAvailability, value);
+        }
+
         public SaleManager()
         {
             InitializeComponent();
@@ -64,7 +71,7 @@ namespace BigPharma
             OrderClickedHandler = order =>
             {
                 SelectedOrder = order;
-                OnPropertyChanged(nameof(FinishOrderButtonsAvailability));
+                OnPropertyChanged(nameof(ConfirmOrderButtonsAvailability));
                 OnPropertyChanged(nameof(FinishOrderLabelContent));
             };
         }
@@ -81,7 +88,8 @@ namespace BigPharma
         private void LoadOrderList()
         {
             AllOrders.Clear();
-            var orders = SQLiteDataAccess.LoadOrders();
+            var orders = SQLiteDataAccess.LoadOrders()
+                .Where(order => order.Status is not OrderStatus.Completed);
             foreach (var order in orders)
             {
                 AllOrders.Add(order);
@@ -95,6 +103,16 @@ namespace BigPharma
         public Action<OrderModel>? OrderClickedHandler { get => orderClickedHandler; private set => SetField(ref orderClickedHandler, value); }
         public string FinishOrderLabelContent => SelectedOrder is null ? "" : $"Selected order: {SelectedOrder.Id}";
 
+        private string sumUpTransactionText = string.Empty;
+        public string SumUpTransactionText
+        {
+            get => FinishTransactionButtonAvailability && AllOrders.Any(order => order.Status == OrderStatus.Confirmed) ? $"Sum: {AllOrders
+                .Where(order => order.Status == OrderStatus.Confirmed)
+                .Select(order => order.Price)
+                .Aggregate((sum, val) => sum + val).ToString()} $" : string.Empty;
+            set => SetField(ref sumUpTransactionText, value); 
+        }
+
         private void OnClosing(object sender, CancelEventArgs e)
         {
             if (sender.GetType() == typeof(MainWindow)) return;
@@ -106,24 +124,26 @@ namespace BigPharma
         {
             var canceledOrder = SelectedOrder?.CreatePatch(order =>
             {
-                order.CompletionDate = DateTime.Now;
                 order.Status = OrderStatus.Canceled;
             });
             if (canceledOrder is null) return; 
             SQLiteDataAccess.EditOrder(canceledOrder);
             LoadOrderList();
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
         }
 
-        private void Complete_OnClick(object sender, RoutedEventArgs e)
+        private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
             var completedOrder = SelectedOrder?.CreatePatch(order =>
             {
-                order.CompletionDate = DateTime.Now;
-                order.Status = OrderStatus.Finalized;
+                order.Status = OrderStatus.Confirmed;
             });
             if(completedOrder is null) return;
             SQLiteDataAccess.EditOrder(completedOrder);
             LoadOrderList();
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
         }
 
         private void CreateOrder_OnClick(object sender, RoutedEventArgs e)
@@ -144,9 +164,7 @@ namespace BigPharma
             {
                 MedicationId = SelectedMedication.Id,
                 Price = SelectedMedication.Price * quantityToOrder,
-                Quantity = quantityToOrder,
-                CreationDate = DateTime.Now,
-                CompletionDate = null
+                Quantity = quantityToOrder
             };
             try
             {
@@ -159,6 +177,39 @@ namespace BigPharma
             }
             LoadMedicationList();
             LoadOrderList();
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
+        }
+
+        private void FinishTransaction_OnClick(object sender, RoutedEventArgs e)
+        {
+            var transaction = new TransactionModel()
+            {
+                CompletionDate = DateTime.Now
+            };
+            var createdTransaction = SQLiteDataAccess.SaveTransaction(transaction);
+            
+            foreach (var orderModel in AllOrders.Where(order => order.Status == OrderStatus.Confirmed))
+            {
+                SQLiteDataAccess.EditOrder(orderModel.CreatePatch(order =>
+                {
+                    order.Status = OrderStatus.Completed;
+                    order.TransactionId = createdTransaction.Id;
+                }));
+            }
+            AllOrders.Clear();
+            ResetUi();
+        }
+
+        private void ResetUi()
+        {
+            SelectedOrder = null;
+            SelectedMedication = null;
+            QuantityToOrder = 0;
+            OnPropertyChanged(nameof(newOrderButtonsAvailability));
+            OnPropertyChanged(nameof(ConfirmOrderButtonsAvailability));
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
         }
 
         /// <summary>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:components="clr-namespace:BigPharma.Components"
         mc:Ignorable="d"
-        Title="SaleWindow" Height="550" Width="1000" Background="#FF333333" Closing="OnClosing"
+        Title="SaleWindow" Height="850" Width="1000" Background="#FF333333" Closing="OnClosing"
         ContentRendered="Window_ContentRendered"   >
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>
@@ -25,9 +25,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <GroupBox Grid.Row="0"
-                      Margin="0, 20, 0, 0"
+                      Margin="0, 80, 0, 0"
                       Padding="20, 0, 20, 20" Height="200">
                     <GroupBox.Header>
                         <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Create order</Label>
@@ -59,7 +60,7 @@
                       Margin="0, 0, 0, 30"
                       Padding="20, 0, 20, 20" Height="173">
                 <GroupBox.Header>
-                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Finish order</Label>
+                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Confirm order</Label>
                 </GroupBox.Header>
                 
                 <Grid>
@@ -83,8 +84,8 @@
                            Text="{Binding FinishOrderLabelContent}"/>
                     <Button Grid.Row="1"
                             Grid.Column="0" Name="Complete"
-                            Click="Complete_OnClick"
-                            IsEnabled="{Binding FinishOrderButtonsAvailability}"
+                            Click="Confirm_OnClick"
+                            IsEnabled="{Binding ConfirmOrderButtonsAvailability}"
                             Background="Green"
                             BorderThickness="3"
                             BorderBrush="White"
@@ -97,7 +98,7 @@
                     <Button Grid.Row="1" 
                             Grid.Column="1" Name="Cancel"
                             Click="Cancel_OnClick"
-                            IsEnabled="{Binding FinishOrderButtonsAvailability}"
+                            IsEnabled="{Binding ConfirmOrderButtonsAvailability}"
                             Background="Brown"
                             BorderThickness="3"
                             BorderBrush="White"
@@ -106,6 +107,44 @@
                             Width="50"
                             Margin="0, 0, 0, 0"
                             FontSize="28">❌</Button>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="2"
+                      VerticalAlignment="Bottom"
+                      Margin="0, 0, 0, 30"
+                      Padding="20, 0, 20, 20" Height="173">
+                <GroupBox.Header>
+                    <Label Foreground="Gainsboro" FontSize="20" FontWeight="DemiBold">Pay</Label>
+                </GroupBox.Header>
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                           Grid.ColumnSpan="2"
+                           Foreground="Gainsboro"
+                           FontSize="15"
+                           MaxWidth="100"
+                           FontWeight="DemiBold" 
+                           TextWrapping="Wrap"
+                           Width="auto"
+                           Height="auto"
+                           Text="{Binding SumUpTransactionText}"/>
+
+                    <Button Grid.Row="1" 
+                            Name="SumUp"
+                            Click="FinishTransaction_OnClick"
+                            IsEnabled="{Binding FinishTransactionButtonAvailability}"
+                            Background="Teal"
+                            BorderThickness="3"
+                            BorderBrush="White"
+                            HorizontalAlignment="Center" 
+                            Height="50" 
+                            Width="50"
+                            Margin="0, 0, 0, 0"
+                            FontSize="28">$</Button>
                 </Grid>
             </GroupBox>
         </Grid>

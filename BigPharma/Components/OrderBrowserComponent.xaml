@@ -18,7 +18,7 @@
                   SelectionChanged="OrdersDataGrid_OnSelectionChanged"
                   AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" 
                   AlternatingRowBackground="WhiteSmoke"
-                  Height="697" 
+                  Height="600" 
                   IsReadOnly="True" ScrollViewer.CanContentScroll="True" 
                   Background="#FFDCDCD9">
             <DataGrid.Columns >
