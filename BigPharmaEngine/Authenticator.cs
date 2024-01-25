@@ -23,9 +23,10 @@ namespace BigPharmaEngine
         public Authenticator()
         {
             this.authenticationService = new AuthenticationService();
+            this.currentUserName = "";
         }
 
-        public bool IsLoggedIn => currentUserName != null;
+        public bool IsLoggedIn => currentUserName != "" && currentUserName != null;
         public string currentUserName { get; private set; }
 
         public bool Login(string username, string password)
@@ -48,7 +49,7 @@ namespace BigPharmaEngine
         }
         public void Logout()
         {
-            currentUserName = null;
+            currentUserName = "";
         }
     }
 }
