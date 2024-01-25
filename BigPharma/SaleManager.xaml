@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:components="clr-namespace:BigPharma.Components"
-        xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
         Title="SaleWindow" Height="550" Width="1000" Background="#FF333333" Closing="OnClosing"
         ContentRendered="Window_ContentRendered"   >

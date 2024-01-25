@@ -118,7 +118,7 @@ namespace BigPharma
             {
                 ValidateInputSources();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return;
             }
