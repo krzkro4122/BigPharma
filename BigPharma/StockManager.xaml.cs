@@ -27,7 +27,7 @@ namespace BigPharma
             LoadMedicationList();
             SelectionChangedHandler = medication =>
             {
-                SelectedMedication = medication;
+                SelectedMedication = medication.Copy();
             };
         }
 
@@ -187,9 +187,9 @@ namespace BigPharma
 
         private void AddMedicationInternal(MedicationModel medication)
         {
-            MedicationModel addedMedication = SQLiteDataAccess.SaveMedication
+            var addedMedication = SQLiteDataAccess.SaveMedication
             (
-                new MedicationModel()
+                new MedicationModel
                 {
                     Name = medication.Name,
                     Price = medication.Price,
