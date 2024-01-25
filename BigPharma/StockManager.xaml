@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:components="clr-namespace:BigPharma.Components"
-        xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
         Title="BigPharma - Stock Manager" Height="935" Width="1176"
         Closing="OnClosing"
@@ -98,7 +97,7 @@
                                 <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Id" Height="34"/>
                                 <TextBox Name="UpdateIdTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedMedication.Id}" Height="30" Background="#FFDCDCD9" Width="85" TextChanged="UpdateIdTextBox_TextChanged"/>
                             </DockPanel>
-                            <DockPanel Margin="10, 0, 0, 0" Grid.Row="0">
+                            <DockPanel Margin="10, 0, 0, 0">
                                 <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Name" Height="34" Width="112" HorizontalAlignment="Left"/>
                                 <TextBox Name="UpdateNameTextBox"
                                          IsEnabled="False"
@@ -107,7 +106,7 @@
                                          Text="{Binding SelectedMedication.Name}" Height="30" Background="#FFDCDCD9"></TextBox>
                             </DockPanel>
                         </DockPanel>
-                        <DockPanel Grid.Row="2" Grid.RowSpan="1">
+                        <DockPanel Grid.Row="2">
                             <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Description" Height="34"/>
                             <TextBox Name="UpdateDescriptionTextBox" IsEnabled="False" TextWrapping="Wrap" FontSize="16" Padding="0,7,0,0" Foreground="Black" Text="{Binding SelectedMedication.Description}" Background="#FFDCDCD9"/>
                         </DockPanel>
