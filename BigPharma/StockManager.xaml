@@ -119,7 +119,8 @@
                             </Grid.ColumnDefinitions>
                             <DockPanel Grid.Column="0">
                                 <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Price" Height="34"/>
-                                <TextBox Name="UpdatePriceTextBox" IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedMedication.Price}" Height="30" Background="#FFDCDCD9"/>
+                                <TextBox Name="UpdatePriceTextBox" 
+                                         IsEnabled="False" FontSize="16" Foreground="Black" Text="{Binding SelectedMedication.Price}" Height="30" Background="#FFDCDCD9"/>
                             </DockPanel>
                             <DockPanel Grid.Column="2">
                                 <Label DockPanel.Dock="Top" Foreground="Gainsboro" FontSize="18" FontWeight="Bold" Content="Quantity" Height="34"/>

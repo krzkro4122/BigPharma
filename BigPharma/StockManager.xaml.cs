@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using BigPharmaEngine.Models;
 using BigPharmaEngine.Models.Extensions;
 
@@ -112,6 +114,14 @@ namespace BigPharma
         
         private void Handle_Medication_Update()
         {
+            try
+            {
+                ValidateInputSources();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
             UpdateMedicationInternal(SelectedMedication);
             LoadMedicationList();
         }
@@ -204,6 +214,26 @@ namespace BigPharma
         {
             SQLiteDataAccess.UpdateMedication(patch);
         }
+        
+        private void ValidateInputSources()
+        {
+            BindingExpression nameBinding = UpdateNameTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression descriptionBinding = UpdateDescriptionTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression priceBinding = UpdatePriceTextBox.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression quantityBinding = UpdateQuantityTextBox.GetBindingExpression(TextBox.TextProperty);                
+            
+            nameBinding.UpdateSource();
+            descriptionBinding.UpdateSource();
+            priceBinding.UpdateSource();
+            quantityBinding.UpdateSource();
+            
+            if (nameBinding.ValidationErrors is not null || descriptionBinding.ValidationErrors is not null || 
+                priceBinding.ValidationErrors is not null || quantityBinding.ValidationErrors is not null)
+            {
+                throw new Exception("Validation not valid.");
+            }
+        }
+
         
         private void DeleteMedicationInternal(MedicationModel medication)
         {
