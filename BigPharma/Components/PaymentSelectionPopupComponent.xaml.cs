@@ -1,11 +1,9 @@
 using System;
 using System.Windows;
-using System.Windows.Controls;
-using BigPharmaEngine.Models;
 
 namespace BigPharma.Components;
 
-public partial class PaymentSelectionPopupComponent : UserControl
+public partial class PaymentSelectionPopupComponent
 {
     private static readonly DependencyProperty CashChosenHandlerDependencyProperty =
         DependencyProperty.Register(
@@ -34,7 +32,6 @@ public partial class PaymentSelectionPopupComponent : UserControl
     public PaymentSelectionPopupComponent()
     {
         InitializeComponent();
-        // AttachDoubleClickHandler();
     }
 
     private void CashChosen_OnClick(object sender, RoutedEventArgs e)

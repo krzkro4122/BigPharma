@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
         Title="AuthWindow" Height="450" Width="800" Background="#FF333333"
         Closing="OnClosing"
@@ -25,20 +24,22 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Username"/>
-        <TextBox x:Name="Login_Username" Grid.Row="0" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="1" Margin="53,0,-218,17" Grid.RowSpan="1"/>
+        <TextBox Grid.Column="0" x:Name="LoginUsername" Grid.Row="0" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="53,0,-218,17" />
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Password"/>
-        <TextBox x:Name="Login_Password" Grid.Row="1" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="1" Margin="53,0,-218,20" Grid.RowSpan="1"/>
+        <TextBox Grid.Column="0" x:Name="LoginPassword" Grid.Row="1" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="53,0,-218,20" />
         <Button Grid.Row="2" Grid.Column="0" Content="Login" Click="Login_Click"/>
         <Label x:Name="LoginWarningLabel" Grid.Row="2" Grid.Column="1" Content="" Foreground="Red" Margin="0,0,0,0"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Text=""/>
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Username"/>
-        <TextBox x:Name="Register_Username" Grid.Row="3" Text="{Binding Register_Username, UpdateSourceTrigger=PropertyChanged}" Margin="5,16,-266,17" Grid.RowSpan="3" Grid.Column="1"/>
+        <TextBox x:Name="RegisterUsername" Grid.Row="3" Text="{Binding Register_Username, UpdateSourceTrigger=PropertyChanged}" Margin="5,16,-266,17" Grid.RowSpan="3" Grid.Column="1"/>
         <TextBlock Grid.Row="5" Grid.Column="0" Text="Email"/>
-        <TextBox x:Name="Register_Email" Grid.Row="5" Text="{Binding Register_Email, UpdateSourceTrigger=PropertyChanged}" Margin="6,2,-266,18" Grid.RowSpan="2" Grid.Column="1"/>
+        <TextBox x:Name="RegisterEmail" Grid.Row="5" Text="{Binding Register_Email, UpdateSourceTrigger=PropertyChanged}" Margin="6,2,-266,18" Grid.RowSpan="2" Grid.Column="1"/>
         <TextBlock Grid.Row="6" Grid.Column="0" Text="Password"/>
-        <TextBox x:Name="Register_Password" Grid.Row="5" Text="{Binding Register_Password, UpdateSourceTrigger=PropertyChanged}" Margin="5,18,-266,1" Grid.RowSpan="2" Grid.Column="1"/>
+        <TextBox x:Name="RegisterPassword" Grid.Row="5" Text="{Binding Register_Password, UpdateSourceTrigger=PropertyChanged}" Margin="5,18,-266,1" Grid.RowSpan="2" Grid.Column="1"/>
         <TextBlock Grid.Row="7" Grid.Column="0" Text="Confirm Password"/>
-        <TextBox x:Name="Register_ConfirmPassword" Grid.Row="7" Text="{Binding Register_ConfirmPassword, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,-266,20" Grid.RowSpan="2" Grid.Column="1"/>
+        <TextBox x:Name="RegisterConfirmPassword" Grid.Row="7" Text="{Binding Register_ConfirmPassword, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,-266,20" Grid.RowSpan="2" Grid.Column="1"/>
         <Button Grid.Row="8" Grid.Column="0" Content="Register" Click="Register_Click"/>
         <Label x:Name="RegisterWarningLabel" Grid.Row="8" Grid.Column="1" Content="" Foreground="Red" Margin="0,0,0,0"/>
     </Grid>

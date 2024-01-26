@@ -3,17 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using BigPharmaEngine.Models;
-using BigPharmaEngine.Models.Extensions;
 
 namespace BigPharma
 {
-    public sealed partial class StockManager : Window, INotifyPropertyChanged
+    public sealed partial class StockManager : INotifyPropertyChanged
     {
         private MedicationModel? selectedMedication;
         public MedicationModel? SelectedMedication
@@ -245,7 +242,7 @@ namespace BigPharma
             SelectedMedication = null;
         }
 
-        private Action<MedicationModel>? selectionChangedHandler = null;
+        private Action<MedicationModel>? selectionChangedHandler;
         public Action<MedicationModel>? SelectionChangedHandler { get => selectionChangedHandler; set => SetField(ref selectionChangedHandler, value); }
         
         /// <summary>
@@ -258,12 +255,11 @@ namespace BigPharma
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
-            return true;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

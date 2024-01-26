@@ -14,11 +14,11 @@ namespace BigPharma
     public sealed partial class SaleManager : INotifyPropertyChanged
     {
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
-        private MedicationModel? SelectedMedication { get; set; } = null;
+        private MedicationModel? SelectedMedication { get; set; }
         public ObservableCollection<OrderModel> AllOrders { get; set; } = new();
-        private OrderModel? SelectedOrder { get; set; } = null;
+        private OrderModel? SelectedOrder { get; set; }
 
-        private int quantityToOrder = 0;
+        private int quantityToOrder;
         public int QuantityToOrder
         {
             get => quantityToOrder;
@@ -29,7 +29,7 @@ namespace BigPharma
             }
         }
 
-        private bool newOrderButtonsAvailability = false;
+        private bool newOrderButtonsAvailability;
         public bool NewOrderButtonsAvailability
         {
             get
@@ -44,14 +44,14 @@ namespace BigPharma
             set => SetField(ref newOrderButtonsAvailability, value);
         }
 
-        private bool confirmOrderButtonsAvailability = false;
+        private bool confirmOrderButtonsAvailability;
         public bool ConfirmOrderButtonsAvailability
         {
             get => SelectedOrder is not null; 
             set => SetField(ref confirmOrderButtonsAvailability, value);
         }
 
-        private bool finishTransactionButtonAvailability = false;
+        private bool finishTransactionButtonAvailability;
         public bool FinishTransactionButtonAvailability
         {
             get => AllOrders.Any() && AllOrders.All(order => order.Status != OrderStatus.Created);
@@ -240,12 +240,11 @@ namespace BigPharma
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
-            return true;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

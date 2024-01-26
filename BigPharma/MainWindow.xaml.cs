@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace BigPharma
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         StockManager stock;
         SaleManager sale;

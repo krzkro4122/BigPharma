@@ -25,10 +25,10 @@ namespace BigPharmaEngine
             return property.ToLower().Contains(criterion.ToLower()); 
         }
 
-        public static MedicationModel? Find_Medication(int Id, Collection<MedicationModel> medications)
+        public static MedicationModel? Find_Medication(int id, Collection<MedicationModel> medications)
         {
             foreach (var medication in medications)            
-                if (medication.Id == Id) 
+                if (medication.Id == id) 
                     return medication;             
             return null;
         }
