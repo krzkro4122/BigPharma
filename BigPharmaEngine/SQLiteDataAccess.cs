@@ -132,7 +132,7 @@ public class SQLiteDataAccess
         using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
         {
             // Query to get the sum of all order values
-            var output = cnn.ExecuteScalar<int>("SELECT SUM(Price) FROM Orders");
+            var output = cnn.ExecuteScalar<int>("SELECT SUM(Price) FROM Orders WHERE STATUS = 3");
             return output;
         }
     }
@@ -142,10 +142,11 @@ public class SQLiteDataAccess
         {
             // Query to get the name of the medication that is ordered most often
             var output = cnn.ExecuteScalar<string>("SELECT Medications.Name FROM Medications " +
-                                                  "JOIN Orders ON Medications.Id = Orders.MedicationId " +
-                                                  "GROUP BY Medications.Id " +
-                                                  "ORDER BY SUM(Orders.Quantity) DESC " +
-                                                  "LIMIT 1");
+                                              "JOIN Orders ON Medications.Id = Orders.MedicationId " +
+                                              "WHERE Orders.STATUS = 3 " +
+                                              "GROUP BY Medications.Id " +
+                                              "ORDER BY SUM(Orders.Quantity) DESC " +
+                                              "LIMIT 1");
             return output;
         }
     }

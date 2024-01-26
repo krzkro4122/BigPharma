@@ -57,7 +57,7 @@ namespace BigPharma
                 MedicationModel medicationWithHighestStock = SQLiteDataAccess.GetMedicationWithHighestStock();
 
                 // Format the string
-                string displayText = $"Most Popular Medication: {medicationWithHighestStock.Name}, we have {medicationWithHighestStock.Quantity} units for the measly price of {medicationWithHighestStock.Price:C} per unit";
+                string displayText = $"Najwięcej mamy : {medicationWithHighestStock.Name}, aż {medicationWithHighestStock.Quantity} opakowań, po {medicationWithHighestStock.Price:C} każde";
 
                 // Update the TextBlock with the formatted string
                 Field2Value.Text = displayText;
@@ -76,7 +76,7 @@ namespace BigPharma
                 int value = SQLiteDataAccess.GetTotalOrderValue();
 
                 // Format the string
-                string displayText = $"BigPharma has {value} zł in our bank account, stonks!";
+                string displayText = $"BigPharma ma {value} zł w banku, stonks!";
 
                 // Update the TextBlock with the formatted string
                 Field3Value.Text = displayText;
