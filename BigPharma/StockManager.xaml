@@ -8,6 +8,7 @@
         Title="BigPharma - Stock Manager" Height="935" Width="1176"
         Closing="OnClosing"
         ContentRendered="Window_ContentRendered"
+        IsVisibleChanged="Window_IsVisibleChanged"
         >
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>

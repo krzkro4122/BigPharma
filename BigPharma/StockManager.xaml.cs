@@ -266,5 +266,14 @@ namespace BigPharma
         {
             LoadMedicationList();
         }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            StockManager? sm = sender as StockManager;
+            if (sm!.IsVisible)
+            {
+                LoadMedicationList();
+            }
+        }
     }
 }
