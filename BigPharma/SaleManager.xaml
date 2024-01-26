@@ -6,7 +6,9 @@
         xmlns:components="clr-namespace:BigPharma.Components"
         mc:Ignorable="d"
         Title="SaleWindow" Height="950" Width="1100" Background="#FF333333" Closing="OnClosing"
-        ContentRendered="Window_ContentRendered"   >
+        ContentRendered="Window_ContentRendered"   
+        IsVisibleChanged="Window_IsVisibleChanged"
+        >
     <Window.DataContext>
         <Binding RelativeSource="{RelativeSource Self}"/>
     </Window.DataContext>

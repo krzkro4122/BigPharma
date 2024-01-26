@@ -125,6 +125,19 @@ namespace BigPharma
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
+            if(SelectedOrder is null) return;
+            if(SelectedOrder.Status == OrderStatus.Canceled) return;
+            var medicationToUpdate = SQLiteDataAccess.LoadMedictaions()
+                .FirstOrDefault(medication => medication.Id == SelectedOrder.MedicationId);
+            if(medicationToUpdate is null) return;
+            try
+            {
+                SQLiteDataAccess.UpdateMedication(medicationToUpdate.CreatePatch(medication => medication.Quantity += SelectedOrder.Quantity));
+            }
+            catch (Exception)
+            {
+                return;
+            }
             var canceledOrder = SelectedOrder?.CreatePatch(order =>
             {
                 order.Status = OrderStatus.Canceled;
@@ -132,12 +145,26 @@ namespace BigPharma
             if (canceledOrder is null) return; 
             SQLiteDataAccess.EditOrder(canceledOrder);
             LoadOrderList();
+            LoadMedicationList();
             OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
             OnPropertyChanged(nameof(SumUpTransactionText));
         }
 
         private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
+            if(SelectedOrder is null) return;
+            if(SelectedOrder.Status == OrderStatus.Confirmed) return;
+            var medicationToUpdate = SQLiteDataAccess.LoadMedictaions()
+                .FirstOrDefault(medication => medication.Id == SelectedOrder.MedicationId);
+            if(medicationToUpdate is null) return;
+            try
+            {
+                SQLiteDataAccess.UpdateMedication(medicationToUpdate.CreatePatch(medication => medication.Quantity -= SelectedOrder.Quantity));
+            }
+            catch (Exception)
+            {
+                return;
+            }
             var completedOrder = SelectedOrder?.CreatePatch(order =>
             {
                 order.Status = OrderStatus.Confirmed;
@@ -145,6 +172,7 @@ namespace BigPharma
             if(completedOrder is null) return;
             SQLiteDataAccess.EditOrder(completedOrder);
             LoadOrderList();
+            LoadMedicationList();
             OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
             OnPropertyChanged(nameof(SumUpTransactionText));
         }
@@ -152,17 +180,6 @@ namespace BigPharma
         private void CreateOrder_OnClick(object sender, RoutedEventArgs e)
         {
             if(SelectedMedication is null) return;
-            var updatedMedication =
-                SelectedMedication.CreatePatch(medication => medication.Quantity -= quantityToOrder);
-            try
-            {
-                SQLiteDataAccess.UpdateMedication(updatedMedication);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-            
             var order = new OrderModel
             {
                 MedicationId = SelectedMedication.Id,
@@ -248,6 +265,12 @@ namespace BigPharma
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            LoadMedicationList();
+            LoadOrderList();
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             LoadMedicationList();
             LoadOrderList();
