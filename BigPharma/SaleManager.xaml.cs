@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using BigPharmaEngine;
@@ -10,14 +11,14 @@ using BigPharmaEngine.Models.Extensions;
 
 namespace BigPharma
 {
-    public partial class SaleManager : Window, INotifyPropertyChanged
+    public sealed partial class SaleManager : INotifyPropertyChanged
     {
         public ObservableCollection<MedicationModel> AllMedications { get; set; } = new();
-        public MedicationModel SelectedMedication { get; set; } = null;
+        private MedicationModel? SelectedMedication { get; set; }
         public ObservableCollection<OrderModel> AllOrders { get; set; } = new();
-        public OrderModel SelectedOrder { get; set; } = null;
+        private OrderModel? SelectedOrder { get; set; }
 
-        private int quantityToOrder = 0;
+        private int quantityToOrder;
         public int QuantityToOrder
         {
             get => quantityToOrder;
@@ -28,7 +29,7 @@ namespace BigPharma
             }
         }
 
-        private bool newOrderButtonsAvailability = false;
+        private bool newOrderButtonsAvailability;
         public bool NewOrderButtonsAvailability
         {
             get
@@ -43,14 +44,20 @@ namespace BigPharma
             set => SetField(ref newOrderButtonsAvailability, value);
         }
 
-        private bool finishOrderButtonsAvailability = false;
-
-        public bool FinishOrderButtonsAvailability
+        private bool confirmOrderButtonsAvailability;
+        public bool ConfirmOrderButtonsAvailability
         {
             get => SelectedOrder is not null; 
-            set => SetField(ref finishOrderButtonsAvailability, value);
+            set => SetField(ref confirmOrderButtonsAvailability, value);
         }
-        
+
+        private bool finishTransactionButtonAvailability;
+        public bool FinishTransactionButtonAvailability
+        {
+            get => AllOrders.Any() && AllOrders.All(order => order.Status != OrderStatus.Created);
+            set => SetField(ref finishTransactionButtonAvailability, value);
+        }
+
         public SaleManager()
         {
             InitializeComponent();
@@ -64,8 +71,8 @@ namespace BigPharma
             OrderClickedHandler = order =>
             {
                 SelectedOrder = order;
-                OnPropertyChanged(nameof(FinishOrderButtonsAvailability));
-                OnPropertyChanged(nameof(FinishOrderLabelContent));
+                OnPropertyChanged(nameof(ConfirmOrderButtonsAvailability));
+                OnPropertyChanged(nameof(ConfirmOrderLabelContent));
             };
         }
 
@@ -81,58 +88,72 @@ namespace BigPharma
         private void LoadOrderList()
         {
             AllOrders.Clear();
-            var orders = SQLiteDataAccess.LoadOrders();
+            var orders = SQLiteDataAccess.LoadOrders()
+                .Where(order => order.Status is OrderStatus.Canceled or OrderStatus.Confirmed or OrderStatus.Created);
             foreach (var order in orders)
             {
                 AllOrders.Add(order);
             }
         }
 
-        private Action<MedicationModel> medicationClickedHandler;
-        public Action<MedicationModel> MedicationClickedHandler { get => medicationClickedHandler; private set => SetField(ref medicationClickedHandler, value); }
+        private Action<MedicationModel>? medicationClickedHandler;
+        public Action<MedicationModel>? MedicationClickedHandler { get => medicationClickedHandler; private set => SetField(ref medicationClickedHandler, value); }
 
-        private Action<OrderModel> orderClickedHandler;
-        public Action<OrderModel> OrderClickedHandler { get => orderClickedHandler; private set => SetField(ref orderClickedHandler, value); }
-        public string FinishOrderLabelContent => SelectedOrder is null ? "" : $"Selected order: {SelectedOrder.Id}";
+        private Action<OrderModel>? orderClickedHandler;
+        public Action<OrderModel>? OrderClickedHandler { get => orderClickedHandler; private set => SetField(ref orderClickedHandler, value); }
+        public string ConfirmOrderLabelContent => SelectedOrder is null ? "" : $"Selected order: {SelectedOrder.Id}";
+
+        private string sumUpTransactionText = string.Empty;
+        public string SumUpTransactionText
+        {
+            get => FinishTransactionButtonAvailability && AllOrders.Any(order => order.Status == OrderStatus.Confirmed) ? $"Sum: {AllOrders
+                .Where(order => order.Status == OrderStatus.Confirmed)
+                .Select(order => order.Price)
+                .Aggregate((sum, val) => sum + val).ToString()} $" : string.Empty;
+            set => SetField(ref sumUpTransactionText, value); 
+        }
+
+        private Visibility popupVisibility = Visibility.Collapsed;
+        public Visibility PopupVisibility { get => popupVisibility; set => SetField(ref popupVisibility, value); }
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
-            if (sender.GetType() != typeof(MainWindow))
-            {
-                this.Hide();
-                e.Cancel = true;
-            }
+            if (sender.GetType() == typeof(MainWindow)) return;
+            this.Hide();
+            e.Cancel = true;
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
         {
-            var canceledOrder = SelectedOrder.CreatePatch(order =>
+            var canceledOrder = SelectedOrder?.CreatePatch(order =>
             {
-                order.CompletionDate = DateTime.Now;
                 order.Status = OrderStatus.Canceled;
             });
+            if (canceledOrder is null) return; 
             SQLiteDataAccess.EditOrder(canceledOrder);
-            
             LoadOrderList();
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
         }
 
-        private void Complete_OnClick(object sender, RoutedEventArgs e)
+        private void Confirm_OnClick(object sender, RoutedEventArgs e)
         {
-            var completedOrder = SelectedOrder.CreatePatch(order =>
+            var completedOrder = SelectedOrder?.CreatePatch(order =>
             {
-                order.CompletionDate = DateTime.Now;
-                order.Status = OrderStatus.Finalized;
+                order.Status = OrderStatus.Confirmed;
             });
+            if(completedOrder is null) return;
             SQLiteDataAccess.EditOrder(completedOrder);
-            
             LoadOrderList();
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
         }
 
         private void CreateOrder_OnClick(object sender, RoutedEventArgs e)
         {
+            if(SelectedMedication is null) return;
             var updatedMedication =
                 SelectedMedication.CreatePatch(medication => medication.Quantity -= quantityToOrder);
-
             try
             {
                 SQLiteDataAccess.UpdateMedication(updatedMedication);
@@ -146,9 +167,7 @@ namespace BigPharma
             {
                 MedicationId = SelectedMedication.Id,
                 Price = SelectedMedication.Price * quantityToOrder,
-                Quantity = quantityToOrder,
-                CreationDate = DateTime.Now,
-                CompletionDate = null
+                Quantity = quantityToOrder
             };
             try
             {
@@ -161,24 +180,71 @@ namespace BigPharma
             }
             LoadMedicationList();
             LoadOrderList();
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
+        }
+
+        private void FinishTransaction_OnClick(object sender, RoutedEventArgs e)
+        {
+            var transaction = new TransactionModel()
+            {
+                CompletionDate = DateTime.Now
+            };
+            var createdTransaction = SQLiteDataAccess.SaveTransaction(transaction);
+            
+            foreach (var orderModel in AllOrders.Where(order => order.Status is OrderStatus.Confirmed))
+            {
+                SQLiteDataAccess.EditOrder(orderModel.CreatePatch(order =>
+                {
+                    order.Status = OrderStatus.Completed;
+                    order.TransactionId = createdTransaction.Id;
+                }));
+            }
+            foreach (var orderModel in AllOrders.Where(order => order.Status is OrderStatus.Canceled))
+            {
+                SQLiteDataAccess.EditOrder(orderModel.CreatePatch(order =>
+                {
+                    order.Status = OrderStatus.Archived;
+                    order.TransactionId = createdTransaction.Id;
+                }));
+            }
+            AllOrders.Clear();
+            ResetUi();
+            PopupVisibility = Visibility.Visible;
+        }
+
+        private void ResetUi()
+        {
+            SelectedOrder = null;
+            SelectedMedication = null;
+            QuantityToOrder = 0;
+            OnPropertyChanged(nameof(newOrderButtonsAvailability));
+            OnPropertyChanged(nameof(ConfirmOrderButtonsAvailability));
+            OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
+            OnPropertyChanged(nameof(SumUpTransactionText));
+            OnPropertyChanged(nameof(ConfirmOrderLabelContent));
+        }
+
+        private void ClosePopup()
+        {
+            GreatPopup.IsOpen = false;
         }
 
         /// <summary>
         /// INotifyPropertyChanged stuff
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
-            return true;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

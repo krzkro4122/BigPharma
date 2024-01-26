@@ -7,7 +7,7 @@ using BigPharmaEngine.Models;
 
 namespace BigPharma
 {
-    public partial class Summaries : Window
+    public partial class Summaries
     {
         public Summaries()
         {

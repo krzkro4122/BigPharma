@@ -3,12 +3,11 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using BigPharmaEngine;
 using BigPharmaEngine.Models;
 
 namespace BigPharma.Components;
 
-public partial class OrderBrowserComponent : UserControl
+public partial class OrderBrowserComponent
 {
     private static readonly DependencyProperty OrdersDependencyProperty =
         DependencyProperty.Register(nameof(Orders),

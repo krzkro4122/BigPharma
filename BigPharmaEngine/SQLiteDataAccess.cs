@@ -59,7 +59,7 @@ public class SQLiteDataAccess
         using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
         var output = cnn.QuerySingle<OrderModel>
         (
-            "INSERT INTO Orders (Price, Status, MedicationId, Quantity, CreationDate, CompletionDate) values (@Price, @Status, @MedicationId, @Quantity, @CreationDate, @CompletionDate) RETURNING *", 
+            "INSERT INTO Orders (Price, Status, Quantity, MedicationId, TransactionId) values (@Price, @Status, @Quantity, @MedicationId, @TransactionId) RETURNING *", 
             order
         );
         return output;
@@ -69,7 +69,7 @@ public class SQLiteDataAccess
     {
         using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
         cnn.Execute(
-            "UPDATE ORDERS SET STATUS = @Status, Quantity = @Quantity, Price = @Price, CompletionDate = @CompletionDate  WHERE ID = @Id",
+            "UPDATE ORDERS SET STATUS = @Status, Quantity = @Quantity, Price = @Price  WHERE ID = @Id",
             order
         );
     }
@@ -83,7 +83,17 @@ public class SQLiteDataAccess
             order
         );
     }
-        
+
+    public static TransactionModel SaveTransaction(TransactionModel newTransaction)
+    {
+        using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());
+        return cnn.QuerySingle<TransactionModel>(
+            "INSERT INTO TRANSACTIONS (CompletionDate) values (@CompletionDate) RETURNING *",
+            newTransaction
+        );
+    }
+    
+    
     public static ObservableCollection<User> LoadUsers()
     {
         using IDbConnection cnn = new SQLiteConnection(LoadConnectionString());

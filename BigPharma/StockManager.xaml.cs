@@ -3,19 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using BigPharmaEngine.Models;
-using BigPharmaEngine.Models.Extensions;
 
 namespace BigPharma
 {
-    public sealed partial class StockManager : Window, INotifyPropertyChanged
+    public sealed partial class StockManager : INotifyPropertyChanged
     {
-        private MedicationModel selectedMedication;
+        private MedicationModel? selectedMedication;
         public MedicationModel? SelectedMedication
         {
             get => selectedMedication; 
@@ -86,20 +83,20 @@ namespace BigPharma
             string? name = Handle_Name(MedicationName.Text);
             string description = MedicationDescription.Text;
 
-            bool AnyOfTheFieldsIsInvalid = 
-                price == null || 
-                quantity == null || 
-                name == null;
+            bool anyOfTheFieldsIsInvalid = 
+                price is null || 
+                quantity is null || 
+                name is null;
 
-            if (AnyOfTheFieldsIsInvalid) return;
+            if (anyOfTheFieldsIsInvalid) return;
 
             AddMedicationInternal(
-                new MedicationModel()
+                new MedicationModel
                 {
-                    Name = name,
-                    Price = (int) price,
+                    Name = name!,
+                    Price = (int) price! ,
                     Description = description,
-                    Quantity = (int) quantity,
+                    Quantity = (int) quantity!,
                 }
             );
 
@@ -125,6 +122,7 @@ namespace BigPharma
             }
             UpdateMedicationInternal(SelectedMedication);
             LoadMedicationList();
+            Clear_Form_Inputs();
         }
 
         private int? Handle_Price(string text)
@@ -211,59 +209,57 @@ namespace BigPharma
             AllMedications.Add(addedMedication);
         }
 
-        private void UpdateMedicationInternal(MedicationModel patch)
+        private static void UpdateMedicationInternal(MedicationModel? patch)
         {
+            if(patch is null) return;
             SQLiteDataAccess.UpdateMedication(patch);
         }
         
         private void ValidateInputSources()
         {
-            BindingExpression nameBinding = UpdateNameTextBox.GetBindingExpression(TextBox.TextProperty);
-            BindingExpression descriptionBinding = UpdateDescriptionTextBox.GetBindingExpression(TextBox.TextProperty);
-            BindingExpression priceBinding = UpdatePriceTextBox.GetBindingExpression(TextBox.TextProperty);
-            BindingExpression quantityBinding = UpdateQuantityTextBox.GetBindingExpression(TextBox.TextProperty);                
+            var nameBinding = UpdateNameTextBox.GetBindingExpression(TextBox.TextProperty);
+            var descriptionBinding = UpdateDescriptionTextBox.GetBindingExpression(TextBox.TextProperty);
+            var priceBinding = UpdatePriceTextBox.GetBindingExpression(TextBox.TextProperty);
+            var quantityBinding = UpdateQuantityTextBox.GetBindingExpression(TextBox.TextProperty);                
             
-            nameBinding.UpdateSource();
-            descriptionBinding.UpdateSource();
-            priceBinding.UpdateSource();
-            quantityBinding.UpdateSource();
+            nameBinding?.UpdateSource();
+            descriptionBinding?.UpdateSource();
+            priceBinding?.UpdateSource();
+            quantityBinding?.UpdateSource();
             
-            if (nameBinding.ValidationErrors is not null || descriptionBinding.ValidationErrors is not null || 
-                priceBinding.ValidationErrors is not null || quantityBinding.ValidationErrors is not null)
+            if (nameBinding?.ValidationErrors is not null || descriptionBinding?.ValidationErrors is not null || 
+                priceBinding?.ValidationErrors is not null || quantityBinding?.ValidationErrors is not null)
             {
                 throw new Exception("Validation not valid.");
             }
         }
 
         
-        private void DeleteMedicationInternal(MedicationModel medication)
+        private void DeleteMedicationInternal(MedicationModel? medication)
         {
-            if (medication != null)
-            {
-                SQLiteDataAccess.DeleteMedication(medication);
-                SelectedMedication = null;
-            }
+            if (medication == null) return;
+            SQLiteDataAccess.DeleteMedication(medication);
+            SelectedMedication = null;
         }
 
-        private Action<MedicationModel> selectionChangedHandler;
-        public Action<MedicationModel> SelectionChangedHandler { get => selectionChangedHandler; set => SetField(ref selectionChangedHandler, value); }
+        private Action<MedicationModel>? selectionChangedHandler;
+        public Action<MedicationModel>? SelectionChangedHandler { get => selectionChangedHandler; set => SetField(ref selectionChangedHandler, value); }
         
         /// <summary>
         /// INotifyPropertyChanged stuff
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            if (EqualityComparer<T>.Default.Equals(field, value)) return;
             field = value;
             OnPropertyChanged(propertyName);
-            return true;
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)

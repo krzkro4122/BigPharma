@@ -7,8 +7,8 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     
-    <StackPanel Margin="30,30,30,30">
-        <DockPanel>
+    <DockPanel Margin="30,30,30,30">
+        <DockPanel DockPanel.Dock="Top">
             <Label Foreground="Gainsboro" Margin="0,0,20,0" FontSize="24" FontWeight="Bold" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,1">Order List</Label>
             <Label Content="🔍" FontSize="23" Foreground="#FFDCDCD9" Padding="0,5,0,0" RenderTransformOrigin="0.629,-1.213" />
             <TextBox Foreground="#FF333333" Name="SearchBox" FontSize="18" Height="25" SelectionTextBrush="#FFDCDCD9" Background="#FFDCDCD9" TextChanged="SearchBox_TextChanged" />
@@ -17,8 +17,7 @@
                   ItemsSource="{Binding Orders, RelativeSource={RelativeSource AncestorType={x:Type local:OrderBrowserComponent}}}" 
                   SelectionChanged="OrdersDataGrid_OnSelectionChanged"
                   AutoGenerateColumns="False" HorizontalContentAlignment="Stretch" 
-                  AlternatingRowBackground="WhiteSmoke"
-                  Height="697" 
+                  AlternatingRowBackground="WhiteSmoke" 
                   IsReadOnly="True" ScrollViewer.CanContentScroll="True" 
                   Background="#FFDCDCD9">
             <DataGrid.Columns >
@@ -29,5 +28,5 @@
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="60"/>
             </DataGrid.Columns>
         </DataGrid>
-    </StackPanel>
+    </DockPanel>
 </UserControl>

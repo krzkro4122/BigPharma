@@ -1,11 +1,10 @@
 ﻿using BigPharmaEngine;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 
 namespace BigPharma
 {
-    public partial class AuthWindow : Window
+    public partial class AuthWindow
     {
         private Authenticator authenticator;
         public AuthWindow()
@@ -16,9 +15,9 @@ namespace BigPharma
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            if (authenticator.Login(Login_Username.Text, Login_Password.Text))
+            if (authenticator.Login(LoginUsername.Text, LoginPassword.Text))
             {
-                MainWindow mainWindow = (MainWindow) Application.Current.MainWindow;
+                if(Application.Current.MainWindow is not MainWindow mainWindow) return;
                 mainWindow.Unlock_Resources();
                 this.Hide();
             }
@@ -29,9 +28,9 @@ namespace BigPharma
         }
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            if (authenticator.Register(Register_Username.Text, Register_Email.Text, Register_Password.Text, Register_ConfirmPassword.Text))
+            if (authenticator.Register(RegisterUsername.Text, RegisterEmail.Text, RegisterPassword.Text, RegisterConfirmPassword.Text))
             {
-                MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+                if(Application.Current.MainWindow is not MainWindow mainWindow) return;
                 mainWindow.Unlock_Resources();
                 this.Hide();
             }

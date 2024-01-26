@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static BigPharmaEngine.AuthenticationService;
-
-namespace BigPharmaEngine
+﻿namespace BigPharmaEngine
 {
     public interface IAuthenticator
     {
         bool IsLoggedIn { get; }
-        string currentUserName { get; }
+        string CurrentUserName { get; }
         bool Login(string username, string password);
         bool Register(string username, string email, string password, string confirmPassword);
         void Logout();
@@ -23,18 +16,18 @@ namespace BigPharmaEngine
         public Authenticator()
         {
             this.authenticationService = new AuthenticationService();
-            this.currentUserName = "";
+            this.CurrentUserName = "";
         }
 
-        public bool IsLoggedIn => currentUserName != "" && currentUserName != null;
-        public string currentUserName { get; private set; }
+        public bool IsLoggedIn => !string.IsNullOrEmpty(CurrentUserName);
+        public string CurrentUserName { get; private set; }
 
         public bool Login(string username, string password)
         {
             bool loginSuccessful = authenticationService.Login(username, password);
             if (loginSuccessful)
             {
-                currentUserName = username; 
+                CurrentUserName = username; 
                 return true;
             }
             else
@@ -49,7 +42,7 @@ namespace BigPharmaEngine
         }
         public void Logout()
         {
-            currentUserName = "";
+            CurrentUserName = "";
         }
     }
 }
