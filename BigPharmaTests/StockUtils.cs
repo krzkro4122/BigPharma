@@ -36,28 +36,28 @@ public class Tests
     [Test]
     [TestCase(0, "Test0")]
     [TestCase(1, "Test1")]
-    public void Test_Find_Medication_Happy(int Id, string Name)
+    public void Test_Find_Medication_Happy(int id, string name)
     {
         Assert.Multiple(() =>
         {
-            var foundMedication = StockUtils.Find_Medication(Id, medications);
+            var foundMedication = StockUtils.Find_Medication(id, medications);
 
             Assert.That(foundMedication, Is.Not.Null);
-            Assert.That(foundMedication?.Id, Is.EqualTo(Id));
-            Assert.That(foundMedication?.Name, Is.EqualTo(Name));
+            Assert.That(foundMedication?.Id, Is.EqualTo(id));
+            Assert.That(foundMedication?.Name, Is.EqualTo(name));
         });
     }
 
     [Test]
     [TestCase(2, null)]
-    public void Test_Find_Medication_Sad(int Id, string Name)
+    public void Test_Find_Medication_Sad(int id, string name)
     {
         Assert.Multiple(() =>
         {
-            var foundMedication = StockUtils.Find_Medication(Id, medications);
+            var foundMedication = StockUtils.Find_Medication(id, medications);
 
             Assert.That(foundMedication, Is.Null);
-            Assert.That(foundMedication?.Name, Is.EqualTo(Name));
+            Assert.That(foundMedication?.Name, Is.EqualTo(name));
         });
     }
 

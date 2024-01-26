@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using BigPharmaEngine.Models;
+﻿using BigPharmaEngine.Models;
 
 namespace BigPharmaEngine
 {
@@ -13,10 +7,9 @@ namespace BigPharmaEngine
         bool Register(string username, string email, string password, string confirmPassword);
         bool Login(string username, string password);
     }
-    public class AuthenticationService
+    
+    public class AuthenticationService : IAuthenticationService
     {
-        public AuthenticationService() { }
-
         public bool Register(string username, string email, string password, string confirmPassword)
         {
             if (password == confirmPassword)

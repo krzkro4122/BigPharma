@@ -4,5 +4,7 @@ public enum OrderStatus
 {
     Created,
     Canceled,
-    Finalized
+    Confirmed,
+    Completed,
+    Archived
 }

@@ -3,19 +3,18 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using BigPharmaEngine;
 using BigPharmaEngine.Models;
 
 namespace BigPharma.Components
 {
-    public partial class MedicationBrowserComponent : UserControl
+    public partial class MedicationBrowserComponent
     {
-        private static readonly DependencyProperty medicationsDependencyProperty =
+        private static readonly DependencyProperty MedicationsDependencyProperty =
             DependencyProperty.Register(nameof(Medications),
                 typeof(ObservableCollection<MedicationModel>),
                 typeof(MedicationBrowserComponent));
 
-        private static readonly DependencyProperty medicationClickedDependencyProperty =
+        private static readonly DependencyProperty MedicationClickedDependencyProperty =
             DependencyProperty.Register(
                 nameof(MedicationClicked),
                 typeof(Action<MedicationModel>),   
@@ -24,14 +23,14 @@ namespace BigPharma.Components
         
         public ObservableCollection<MedicationModel> Medications
         {
-            get => (ObservableCollection<MedicationModel>)GetValue(medicationsDependencyProperty);
-            set => SetValue(medicationsDependencyProperty, value);
+            get => (ObservableCollection<MedicationModel>)GetValue(MedicationsDependencyProperty);
+            set => SetValue(MedicationsDependencyProperty, value);
         }
 
         public Action<MedicationModel> MedicationClicked
         {
-            get => (Action<MedicationModel>)GetValue(medicationClickedDependencyProperty);
-            set => SetValue(medicationClickedDependencyProperty, value);
+            get => (Action<MedicationModel>)GetValue(MedicationClickedDependencyProperty);
+            set => SetValue(MedicationClickedDependencyProperty, value);
         }
 
         public MedicationBrowserComponent()
@@ -57,10 +56,16 @@ namespace BigPharma.Components
                     {
                         return true;
                     }
-                    
-                    var nameContainsCriterion = medicationModel?.Description?.Contains(criterion) ?? false;
-                    var descriptionContainsCriterion = medicationModel?.Name?.Contains(criterion) ?? false;
-                    
+                    var nameContainsCriterion = false;
+                    var descriptionContainsCriterion = false;
+                    if (medicationModel?.Description is not null)
+                    {
+                        descriptionContainsCriterion = medicationModel.Description.Contains(criterion);
+                    }
+                    if (medicationModel?.Name is not null)
+                    {
+                        nameContainsCriterion = medicationModel.Name.Contains(criterion);
+                    }
                     return nameContainsCriterion ||
                            descriptionContainsCriterion;
                 };
