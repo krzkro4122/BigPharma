@@ -117,7 +117,37 @@ public class SQLiteDataAccess
     {
         return """Data Source=".\data.db";Version=3;""";
     }
-
+    public static int GetTotalOrderValue()
+    {
+        using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+        {
+            // Query to get the sum of all order values
+            var output = cnn.ExecuteScalar<int>("SELECT SUM(Price) FROM Orders");
+            return output;
+        }
+    }
+    public static string GetMostOrderedMedicationName()
+    {
+        using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+        {
+            // Query to get the name of the medication that is ordered most often
+            var output = cnn.ExecuteScalar<string>("SELECT Medications.Name FROM Medications " +
+                                                  "JOIN Orders ON Medications.Id = Orders.MedicationId " +
+                                                  "GROUP BY Medications.Id " +
+                                                  "ORDER BY SUM(Orders.Quantity) DESC " +
+                                                  "LIMIT 1");
+            return output;
+        }
+    }
+    public static int GetHighestOrderValue()
+    {
+        using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+        {
+            // Query to get the value of the highest order
+            var output = cnn.ExecuteScalar<int>("SELECT MAX(Price) FROM Orders");
+            return output;
+        }
+    }
     public static MedicationModel GetMedicationWithHighestStock()
     {
         using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))

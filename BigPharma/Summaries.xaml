@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BigPharma"
         mc:Ignorable="d"
-        Title="Summaries" Height="450" Width="800" Background="#FF333333" Closing="OnClosing">
+        Title="Summaries" Height="450" Width="800" Background="#FF333333" Closing="OnClosing" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,6 +14,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <!-- Add more RowDefinitions if needed for additional fields -->
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -39,6 +40,7 @@
         </StackPanel>
 
         <!-- Return Button -->
-        <Button Grid.Row="4" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="ReturnButton_Click">Wróć</Button>
+        <Button Grid.Row="5" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="ReturnButton_Click">Wróć</Button>
+        <Button Grid.Row="4" Margin="10" FontSize="18" Foreground="#FFF9F6F6" Background="#FF4A4A4A" BorderBrush="#FFB7B5B5" Click="UpdateButton_Click">Aktualizuj</Button>
     </Grid>
 </Window>
