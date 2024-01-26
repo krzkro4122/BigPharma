@@ -5,5 +5,6 @@ public enum OrderStatus
     Created,
     Canceled,
     Confirmed,
-    Completed
+    Completed,
+    Archived
 }

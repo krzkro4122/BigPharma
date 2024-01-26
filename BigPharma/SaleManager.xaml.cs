@@ -72,7 +72,7 @@ namespace BigPharma
             {
                 SelectedOrder = order;
                 OnPropertyChanged(nameof(ConfirmOrderButtonsAvailability));
-                OnPropertyChanged(nameof(FinishOrderLabelContent));
+                OnPropertyChanged(nameof(ConfirmOrderLabelContent));
             };
         }
 
@@ -89,7 +89,7 @@ namespace BigPharma
         {
             AllOrders.Clear();
             var orders = SQLiteDataAccess.LoadOrders()
-                .Where(order => order.Status is not OrderStatus.Completed);
+                .Where(order => order.Status is OrderStatus.Canceled or OrderStatus.Confirmed or OrderStatus.Created);
             foreach (var order in orders)
             {
                 AllOrders.Add(order);
@@ -101,7 +101,7 @@ namespace BigPharma
 
         private Action<OrderModel>? orderClickedHandler;
         public Action<OrderModel>? OrderClickedHandler { get => orderClickedHandler; private set => SetField(ref orderClickedHandler, value); }
-        public string FinishOrderLabelContent => SelectedOrder is null ? "" : $"Selected order: {SelectedOrder.Id}";
+        public string ConfirmOrderLabelContent => SelectedOrder is null ? "" : $"Selected order: {SelectedOrder.Id}";
 
         private string sumUpTransactionText = string.Empty;
         public string SumUpTransactionText
@@ -112,6 +112,9 @@ namespace BigPharma
                 .Aggregate((sum, val) => sum + val).ToString()} $" : string.Empty;
             set => SetField(ref sumUpTransactionText, value); 
         }
+
+        private Visibility popupVisibility = Visibility.Collapsed;
+        public Visibility PopupVisibility { get => popupVisibility; set => SetField(ref popupVisibility, value); }
 
         private void OnClosing(object sender, CancelEventArgs e)
         {
@@ -189,7 +192,7 @@ namespace BigPharma
             };
             var createdTransaction = SQLiteDataAccess.SaveTransaction(transaction);
             
-            foreach (var orderModel in AllOrders.Where(order => order.Status == OrderStatus.Confirmed))
+            foreach (var orderModel in AllOrders.Where(order => order.Status is OrderStatus.Confirmed))
             {
                 SQLiteDataAccess.EditOrder(orderModel.CreatePatch(order =>
                 {
@@ -197,8 +200,17 @@ namespace BigPharma
                     order.TransactionId = createdTransaction.Id;
                 }));
             }
+            foreach (var orderModel in AllOrders.Where(order => order.Status is OrderStatus.Canceled))
+            {
+                SQLiteDataAccess.EditOrder(orderModel.CreatePatch(order =>
+                {
+                    order.Status = OrderStatus.Archived;
+                    order.TransactionId = createdTransaction.Id;
+                }));
+            }
             AllOrders.Clear();
             ResetUi();
+            PopupVisibility = Visibility.Visible;
         }
 
         private void ResetUi()
@@ -210,6 +222,12 @@ namespace BigPharma
             OnPropertyChanged(nameof(ConfirmOrderButtonsAvailability));
             OnPropertyChanged(nameof(FinishTransactionButtonAvailability));
             OnPropertyChanged(nameof(SumUpTransactionText));
+            OnPropertyChanged(nameof(ConfirmOrderLabelContent));
+        }
+
+        private void ClosePopup()
+        {
+            GreatPopup.IsOpen = false;
         }
 
         /// <summary>
